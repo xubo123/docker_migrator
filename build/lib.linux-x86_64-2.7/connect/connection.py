@@ -1,6 +1,6 @@
 import logging
 import socket
-import util
+import tool.util
 
 class connection(object):
     """docker migrate service connection
