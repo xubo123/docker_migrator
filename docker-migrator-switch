@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+
+import argparse
+import os
+import socket
+import thread
+
+default_service_bind_addr = "0.0.0.0"
+default_service_bind_port = 12345
+
+def run_migrator_service(args,unknown_args):
+    
+    print "Waiting for Connection..."
+     
+    host = args.bind_addr,args.bind_port
+    server_sk = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    server_sk.bind(host)
+    server_sk.listen(8)
+    connection_sks = [None,None]
+    print args.path
+
+    while True:
+        for i in range(len(connection_sks)):
+            connection_sks[i] = server_sk.accept()
+
+        #Organize the docker-migrate-service cmd args
+        service_cmd = [args.path]
+        print service_cmd
+        service_cmd.extend(args.unknown_args)
+        service_cmd.extend(["--fdrpc",str(connection_sks[0]),"--fdmem",str(connection_sks[1])])
+
+        #Exec the cmd
+        cmd = " ".join(service_cmd)
+        print "Exec cmd docker-migrate-service:{0}"+str(cmd)
+        thread.start_new_thread(os.system,tuple([cmd]))
+
+parser = argparse.ArgumentParser("docker-migrator args process")
+sub_parser = parser.add_subparsers(title = "Sunbcommands")
+service_parser = sub_parser.add_parser("service",help="start docker-migrator service thread!")
+service_parser.set_defaults(func=run_migrator_service)
+service_parser.add_argument("--bind-addr",help="IP to bind to",type=str,default=default_service_bind_addr)
+service_parser.add_argument("--bind-port",help="port to bind to",type=int,default=default_service_bind_port)
+service_parser.add_argument("--path",help="the path of docker-migrator service script",type=str,default=os.path.join(os.path.dirname(__file__),"docker-migrate-service")) 
+
+
+args,unknown_args = parser.parse_known_args()
+try:
+    args.func(args,unknown_args)
+except KeyboardInterrupt:
+    pass
