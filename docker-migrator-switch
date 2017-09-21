@@ -26,7 +26,7 @@ def run_migrator_service(args,unknown_args):
         #Organize the docker-migrate-service cmd args
         service_cmd = [args.path]
         print service_cmd
-        service_cmd.extend(args.unknown_args)
+        service_cmd.extend(unknown_args)
         service_cmd.extend(["--fdrpc",str(connection_sks[0]),"--fdmem",str(connection_sks[1])])
 
         #Exec the cmd
