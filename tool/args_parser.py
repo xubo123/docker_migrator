@@ -5,8 +5,8 @@ def docker_migrate_service_parse():
     parser = argparse.ArgumentParser("Open docker migrate service!")
     parser.add_argument("--fdrpc",type=int,required=True,help="RPC Socket File Descriptor")
     parser.add_argument("--fdmem",type=int,required=True,help="Memory Socket File Descriptor")
-    parser.add_argument("--fdfs",type=int,required=True,help="Module specific definition of fs channel")
-    parser.add_argument("--log-file",type=int,required=True,help="The logfile path to write log")
+    parser.add_argument("--fdfs",help="Module specific definition of fs channel")
+    parser.add_argument("--log-file",help="The logfile path to write log")
 
     return parser.parse_args()
 
@@ -18,6 +18,6 @@ def docker_migrate_client_parse():
     parser.add_argument("--dest_ip",help = "IP of where to migrate!")
     parser.add_argument("--fdmem",type=int,required=True,help="socket fd to transmit memory data!")
     parser.add_argument("--fdrpc",type=int,required=True,help="socket fd to send rpc require data!")
-    parser.add_argument("--fdfs",type=int,required=True,help="socket fd to send fs data!")
+    parser.add_argument("--fdfs",help="socket fd to send fs data!")
 
     return parser.parse_args()
