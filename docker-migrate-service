@@ -5,6 +5,8 @@ import logging
 import sys
 import connect.connection
 import server.rpc_server_thread
+import server.rpc_service
+import signal
 
 def fin(foo, bar):
 	global stop_fd

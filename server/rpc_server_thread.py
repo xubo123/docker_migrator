@@ -25,11 +25,11 @@ class rpc_server_daemon(threading.Thread):
 
 class _rpc_server_manager(object):
     def __init__(self,rpc_service,connection):
-        self._rpc_migrate_service = rpc_migrate_service
+        self._rpc_migrate_service = rpc_service
         self._connection = connection
         self._poll_list = []
         self._alive = True
-        self.add_poll_item(_rpc_server_sk(connection.rpcfd))
+        self.add_poll_item(_rpc_server_sk(connection.fdrpc))
         
     def add_poll_item(self, item):
 		self._poll_list.append(item)
