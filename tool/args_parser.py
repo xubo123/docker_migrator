@@ -19,5 +19,5 @@ def docker_migrate_client_parse():
     parser.add_argument("--fdmem",type=int,required=True,help="socket fd to transmit memory data!")
     parser.add_argument("--fdrpc",type=int,required=True,help="socket fd to send rpc require data!")
     parser.add_argument("--fdfs",help="socket fd to send fs data!")
-
+    parser.add_argument("--mode",choices=iters.MIGRATION_MODES, default=iters.MIGRATION_MODE_LIVE,help="Mode of migration")
     return parser.parse_args()
