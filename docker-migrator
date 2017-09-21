@@ -9,7 +9,7 @@ import connect.connection
 
 
 #Parse arguments
-args = tool.args_parser.parse_client_args()
+args = tool.args_parser.docker_migrate_client_parse()
 
 #logging configuration
 logging.basicConfig(filename=args.log_file,filemode="a", level=logging.INFO,
@@ -19,7 +19,7 @@ logging.basicConfig(filename=args.log_file,filemode="a", level=logging.INFO,
 # Setup hook to log uncaught exceptions
 sys.excepthook = phaul.util.log_uncaught_exception
 
-phaul.util.log_header()
+tool.util.log_header()
 logging.info("Starting migrate!")
 
 #Establish connection
