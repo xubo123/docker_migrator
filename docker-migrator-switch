@@ -34,8 +34,8 @@ def run_migrator_service(args,unknown_args):
         print "Exec cmd docker-migrate-service:{0}"+str(cmd)
         thread.start_new_thread(os.system,tuple([cmd]))
   
-def run_phaul_client(args, unknown_args):
-	"""Run p.haul"""
+def run_migrator_client(args, unknown_args):
+	"""Run docker-migrator"""
 
 	print "Establish connection..."
 
@@ -47,15 +47,15 @@ def run_phaul_client(args, unknown_args):
 		connection_sks[i] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		connection_sks[i].connect(dest_host)
 
-	# Organize p.haul args
+	# Organize docker-migrator args
 	target_args = [args.path]
 	target_args.extend(unknown_args)
 	target_args.extend(["--to", args.to,
 		"--fdrpc", str(connection_sks[0].fileno()),
 	        "--fdmem", str(connection_sks[1].fileno())])
 
-	# Call p.haul
-	print "Exec p.haul: {0}".format(" ".join(target_args))
+	# Call docker-migrator
+	print "Exec docker-migrator: {0}".format(" ".join(target_args))
 	os.system(" ".join(target_args))
 
 parser = argparse.ArgumentParser("docker-migrator args process")
@@ -69,12 +69,12 @@ service_parser.add_argument("--path",help="the path of docker-migrator service s
 
 # Initialize client mode arguments parser
 client_parser = sub_parser.add_parser("client", help="Client mode")
-client_parser.set_defaults(func=run_phaul_client)
-client_parser.add_argument("to", help="IP where to haul")
-client_parser.add_argument("--port", help="Port where to haul", type=int,
+client_parser.set_defaults(func=run_migrator_client)
+client_parser.add_argument("to", help="IP where to migrate")
+client_parser.add_argument("--port", help="Port where to migrate", type=int,
 	default=default_service_bind_port)
-client_parser.add_argument("--path", help="Path to p.haul script",
-	default=os.path.join(os.path.dirname(__file__), "p.haul"))
+client_parser.add_argument("--path", help="Path to docker-migrator script",
+	default=os.path.join(os.path.dirname(__file__), "docker-migrator"))
 
 
 args,unknown_args = parser.parse_known_args()
