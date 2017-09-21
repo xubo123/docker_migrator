@@ -21,7 +21,7 @@ def run_migrator_service(args,unknown_args):
 
     while True:
         for i in range(len(connection_sks)):
-            connection_sks[i] = server_sk.accept()
+            connection_sks[i],dummy = server_sk.accept()
 
         #Organize the docker-migrate-service cmd args
         service_cmd = [args.path]
