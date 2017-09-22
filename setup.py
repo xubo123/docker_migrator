@@ -1,6 +1,9 @@
 from distutils.core import setup
-
-
+setup(name='client',
+      description='Tool to live-migrate docker containers',
+      license='GPLv2',
+      packages=['client'],
+      )
 setup(name='tool',
       description='Tool to live-migrate docker containers',
       license='GPLv2',
