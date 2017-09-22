@@ -1,5 +1,6 @@
 import errno
 import logging
+import client.img_migrator
 import client.rpc_client
 import client.docker_migrate_worker
 import tool.criu_api
@@ -22,7 +23,7 @@ class migration_iter_controller(object):
         if not self.fs:
             raise Exception("No fs driver found!")
         self.img = client.img_migrator.lm_docker_img("dump")
-        self.criu_connection = criu_api.criu_conn(self.connection.mem_sk)
+        self.criu_connection = tool.criu_api.criu_conn(self.connection.fdmem)
         logging.info("Remote Setting up!")
         ct_id = dst_id if dst_id else ct_id
         self.dest_rpc_caller.setup(ct_id,mode)

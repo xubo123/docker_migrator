@@ -5,8 +5,11 @@ import signal
 import subprocess as sp
 from subprocess import PIPE
 import time
+import client.fs_migrator
 
 docker_dir = "/var/lib/docker/"
+docker_run_state_dir = "/var/run/runc/"
+docker_run_meta_dir = "/run/runc/"
 
 class docker_lm_worker(object):
     def __init__(self,ct_id):
@@ -27,7 +30,7 @@ class docker_lm_worker(object):
         self.load_ct_config(docker_dir)
     
     def get_full_ctid(self):
-        container_dirlist = os.listdir(os.path.join(docker_dir,"container"))
+        container_dirlist = os.listdir(os.path.join(docker_dir,"containers"))
         full_id = ""
         for container_dir in container_dirlist:
             container_dir = container_dir.rsplit("/")
@@ -88,7 +91,7 @@ class docker_lm_worker(object):
         lm_fs_dir.extend(self._ct_diff_dirs)
         lm_fs_dir.extend(self._ct_volumes_dirs)
         lm_fs_dir.extend(self._mnt_diff_dirs)
-        return fs_migrator.lm_docker_fs(lm_fs_dir)
+        return client.fs_migrator.lm_docker_fs(lm_fs_dir)
 
     def get_mount_id(self):
         container_id = self.full_ctid
