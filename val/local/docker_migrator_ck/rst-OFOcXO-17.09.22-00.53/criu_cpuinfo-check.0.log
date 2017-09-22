@@ -1,0 +1,2 @@
+Error (criu/util.c:551): Can't read link of fd -404: No such file or directory
+Error (criu/protobuf.c:75): Unexpected EOF on (null)

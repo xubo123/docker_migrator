@@ -1,6 +1,7 @@
 #
 #Help to operate on target host
 #
+import tool.criu_req
 import tool.criu_api
 import logging
 import client.iters
@@ -13,7 +14,7 @@ class rpc_migrate_service(object):
         self.criu_connection = None
         self.img = None
         self.__mode = client.iters.MIGRATION_MODE_LIVE
-    
+        self.restored = False    
     def on_connect(self):
         logging.info("Rpc Service Connected!")
     
@@ -55,7 +56,7 @@ class rpc_migrate_service(object):
     
     def rpc_check_cpuinfo(self):
         logging.info("Checking cpuinfo")
-        req = criu_req.make_cpuinfo_check_req(self.img)
+        req = tool.criu_req.make_cpuinfo_check_req(self.img)
         resp = self.criu_connection.send_req(req)
 	logging.info("\t`- %s", resp.success)
 	return resp.success

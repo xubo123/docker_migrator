@@ -35,7 +35,7 @@ class untar_thread(threading.Thread):
 
 	def run(self):
 		try:
-			tf_fileobj = util.tarfile_fileobj_wrap(self.__sk)
+			tf_fileobj = tool.util.tarfile_fileobj_wrap(self.__sk)
 			tf = tarfile.open(mode="r|", fileobj=tf_fileobj)
 			tf.extractall(self.__dir)
 			tf.close()
@@ -156,7 +156,7 @@ class lm_docker_img(object):
 			dirname = self.work_dir()
 		else:
 			dirname = self.image_dir()
-                dirname = os.path.join(dirname,"mysql_checkpoint")
+                        dirname = os.path.join(dirname,"mysql_checkpoint")
 		self.__acc_tar = untar_thread(sk, dirname)
 		self.__acc_tar.start()
 		logging.info("Started images server")

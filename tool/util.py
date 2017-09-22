@@ -3,6 +3,7 @@ import fcntl
 import socket
 import errno
 import os
+import tarfile
 
 class tarfile_fileobj_wrap(object):
 	"""Helper class provides read/write interface for socket object
