@@ -1,8 +1,10 @@
 #
 #Help to operate on target host
 #
+import tool.criu_api
 import logging
 import client.iters
+import client.img_migrator
 import client.docker_migrate_worker
 class rpc_migrate_service(object):
     def __init__(self,connection):
@@ -32,6 +34,10 @@ class rpc_migrate_service(object):
         self.mode = mode
         self._migrate_worker = client.docker_migrate_worker.docker_lm_worker(ct_id)
         self._migrate_worker.init_src()
+        
+        if client.iters.is_live_mode(self.__mode):
+           self.img = client.img_migrator.lm_docker_img("rst")
+           self.criu_connection = tool.criu_api.criu_conn(self.connection.fdmem)
     
     def rpc_set_options(self,opts):
         self._migrate_worker.set_options(opts)
