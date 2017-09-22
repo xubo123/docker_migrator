@@ -108,7 +108,7 @@ class migration_iter_controller(object):
 		logging.info("Checking CPU compatibility")
 
 		logging.info("\t`- Dumping CPU info")
-		req = criu_req.make_cpuinfo_dump_req(self.img)
+		req = tool.criu_req.make_cpuinfo_dump_req(self.img)
 		resp = self.criu_connection.send_req(req)
 		if resp.HasField('cr_errno') and (resp.cr_errno == errno.ENOTSUP):
 			logging.info("\t`- Dumping CPU info not supported")

@@ -1,6 +1,7 @@
 import argparse
 import client.iters
-
+import client.img_migrator
+import tool.criu_api
 def docker_migrate_service_parse():
     """ Parse docker migrate service Command args"""
     parser = argparse.ArgumentParser("Open docker migrate service!")
@@ -22,4 +23,12 @@ def docker_migrate_client_parse():
     parser.add_argument("--fdfs",help="socket fd to send fs data!")
     parser.add_argument("--mode",choices=client.iters.MIGRATION_MODES, default=client.iters.MIGRATION_MODE_LIVE,help="Mode of migration")
     parser.add_argument("--log-file",help="Write logging messages to specified file")
+    parser.add_argument("--force",default=False, action='store_true',help="Don't do any sanity checks")
+    parser.add_argument("--skip-cpu-check",default=False, action='store_true',help="Skip CPU compatibility check")
+
+    parser.add_argument("--skip-criu-check",default=False, action='store_true',help="Skip criu compatibility check")
+    parser.add_argument("--keep-images",default=False, action='store_true',help="Keep images after migration")
+    parser.add_argument("--img-path",default=client.img_migrator.def_path,help="Directory where to put images")
+    parser.add_argument("-v",default=tool.criu_api.def_verb, type=int, dest="verbose",help="Verbosity level")
+    parser.add_argument("-j", "--shell-job",default=False, action='store_true',help="Allow migration of shell jobs")
     return parser.parse_args()

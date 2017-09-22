@@ -8,11 +8,13 @@ import time
 import tool.util
 import tool.criu_api
 
+def_path = "val/local/docker_migrator_ck"
+
 class opendir(object):
 	def __init__(self, path):
 		self._dirname = path
 		self._dirfd = os.open(path, os.O_DIRECTORY)
-		util.set_cloexec(self)
+		tool.util.set_cloexec(self)
 
 	def close(self):
 		os.close(self._dirfd)
@@ -57,6 +59,8 @@ class img_tar(object):
 		self.__tf.close()
 
 class lm_docker_img(object):
+    WDIR = 1
+    IMGDIR = 2
     def __init__(self,typ):
         self.current_iter = 0
         self.sync_time = 0.0
@@ -70,8 +74,8 @@ class lm_docker_img(object):
 		self._keep_on_close = opts["keep_images"]
 
 		suf = time.strftime("-%y.%m.%d-%H.%M", time.localtime())
-		util.makedirs(opts["img_path"])
-		wdir = tempfile.mkdtemp(suf, "%s-" % self._typ, opts["img_path"])
+		tool.util.makedirs(opts["img_path"])
+		wdir = tempfile.mkdtemp(suf, "%s-" % self._type, opts["img_path"])
 		self._work_dir = opendir(wdir)
 		self._img_path = os.path.join(self._work_dir.name(), "img")
 		os.mkdir(self._img_path)
