@@ -2,6 +2,7 @@
 #Help to operate on target host
 #
 import logging
+import client.iters
 
 class rpc_migrate_service(object):
     def __init__(self,connection):
@@ -9,7 +10,7 @@ class rpc_migrate_service(object):
         self.docker_lm_worker = None
         self.criu_connection = None
         self.img = None
-        self.__mode = iters.MIGRATION_MODE_LIVE
+        self.__mode = client.iters.MIGRATION_MODE_LIVE
     
     def on_connect(self):
         logging.info("Rpc Service Connected!")
@@ -19,7 +20,7 @@ class rpc_migrate_service(object):
         if self.criu_connection:
 			     self.criu_connection.close()
         if self.docker_lm_worker:
-		if iters.is_live_mode(self.__mode):
+		if client.iters.is_live_mode(self.__mode):
 			self.docker_lm_worker.umount()
         if self.img:
 	        logging.info("Closing images")

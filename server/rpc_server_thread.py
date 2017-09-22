@@ -89,9 +89,9 @@ class _rpc_server_sk(object):
             if rpc_list[0] == RPC_CALL:
                 if not self._master:
                     raise Exception("Service not setup yet!  init_rpc First!")
-                res = getattr(self._master,"rpc_"+data[1])(*data[2])
+                res = getattr(self._master,"rpc_"+rpc_list[1])(*rpc_list[2])
             elif rpc_list[0] == RPC_CMD:
-                res = getattr(self,data[1])(mgr,*data[2])
+                res = getattr(self,rpc_list[1])(server_manager,*rpc_list[2])
             else :
                 raise Exception("Rpc type is not exist except CALL and CMD!")
         except Exception as e :
