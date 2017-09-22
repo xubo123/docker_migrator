@@ -45,7 +45,7 @@ class untar_thread(threading.Thread):
 
 class img_tar(object):
 	def __init__(self, sk, dirname):
-		tf_fileobj = util.tarfile_fileobj_wrap(sk)
+		tf_fileobj = tool.util.tarfile_fileobj_wrap(sk)
 		self.__tf = tarfile.open(mode="w|", fileobj=tf_fileobj)
 		self.__dir = dirname
 
