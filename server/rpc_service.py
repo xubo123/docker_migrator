@@ -3,11 +3,11 @@
 #
 import logging
 import client.iters
-
+import client.docker_migrate_worker
 class rpc_migrate_service(object):
     def __init__(self,connection):
         self.connection = connection
-        self.docker_lm_worker = None
+        self._migrate_worker = None
         self.criu_connection = None
         self.img = None
         self.__mode = client.iters.MIGRATION_MODE_LIVE
@@ -19,9 +19,9 @@ class rpc_migrate_service(object):
         logging.info("Rpc Service Disconnected!")
         if self.criu_connection:
 			     self.criu_connection.close()
-        if self.docker_lm_worker:
+        if self._migrate_worker:
 		if client.iters.is_live_mode(self.__mode):
-			self.docker_lm_worker.umount()
+			self._migrate_worker.umount()
         if self.img:
 	        logging.info("Closing images")
 		if not self.restored:
@@ -30,7 +30,7 @@ class rpc_migrate_service(object):
 
     def rpc_setup(self,ct_id,mode):
         self.mode = mode
-        self._migrate_worker = docker_lm_worker(ct_id)
+        self._migrate_worker = client.docker_migrate_worker.docker_lm_worker(ct_id)
         self._migrate_worker.init_src()
     
     def rpc_set_options(self,opts):

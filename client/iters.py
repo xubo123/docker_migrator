@@ -10,6 +10,10 @@ MIGRATION_MODE_LIVE = "live"
 MIGRATION_MODE_RESTART = "restart"
 MIGRATION_MODES = (MIGRATION_MODE_LIVE, MIGRATION_MODE_RESTART)
 
+def is_live_mode(mode):
+	"""Check is migration running in live mode"""
+	return mode == MIGRATION_MODE_LIVE
+
 class migration_iter_controller(object):
     def __init__(self,ct_id,dst_id,connection,mode):
         self._mode = mode
