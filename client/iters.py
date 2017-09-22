@@ -5,6 +5,9 @@ import client.docker_migrate_worker
 import tool.criu_api
 import tool.criu_req
 
+MIGRATION_MODE_LIVE = "live"
+MIGRATION_MODE_RESTART = "restart"
+MIGRATION_MODES = (MIGRATION_MODE_LIVE, MIGRATION_MODE_RESTART)
 
 class migration_iter_controller(object):
     def __init__(self,ct_id,dst_id,connection,mode):
