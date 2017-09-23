@@ -169,7 +169,7 @@ class docker_lm_worker(object):
 	 state_path = os.path.join(self._ct_run_state_dir, "state.json")
          desc_path = os.path.join(path, "descriptors.json")
          config_path = os.path.join(path,"config.json")
-         return (state_path, "state.json"), (desc_path, "descriptors.json"),(config_path,"config.json")
+         return (desc_path, "descriptors.json"),(config_path,"config.json")
 
 
     def put_meta_images(self, dir,ctid,ck_dir):

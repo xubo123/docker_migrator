@@ -96,7 +96,7 @@ class lm_docker_img(object):
 			tf.add(img)
 
 		logging.info("\tAdd migrate_worker images")
-		for himg in migrate_worker.get_meta_images(cdir):
+		for himg in migrate_worker.get_meta_images(os.path.join(cdir,migrate_worker.get_ck_dir())):
 			tf.add(himg[1], himg[0])
 
 		tf.close()

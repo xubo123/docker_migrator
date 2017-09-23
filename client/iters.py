@@ -76,7 +76,7 @@ class migration_iter_controller(object):
 
 			# Restore htype on target
 		logging.info("Asking target host to restore")
-		self.dest_rpc_caller.restore_from_images(self._migrate_worker._ctid,self._migrate_worker.get_ck_dir())
+		self.dest_rpc_caller.restore_from_images(self._migrate_worker._ct_id,self._migrate_worker.get_ck_dir())
 
 	except Exception:
 		self._migrate_worker.migration_fail(self.fs)
