@@ -12,6 +12,7 @@ class rpc_migrate_service(object):
         self.connection = connection
         self._migrate_worker = None
         self.criu_connection = None
+        self.dump_iter_index = 0
         self.img = None
         self.__mode = client.iters.MIGRATION_MODE_LIVE
         self.restored = False    
@@ -34,7 +35,7 @@ class rpc_migrate_service(object):
     def rpc_setup(self,ct_id,mode):
         self.mode = mode
         self._migrate_worker = client.docker_migrate_worker.docker_lm_worker(ct_id)
-        self._migrate_worker.init_src()
+        self._migrate_worker.init_dst()
         
         if client.iters.is_live_mode(self.__mode):
            self.img = client.img_migrator.lm_docker_img("rst")

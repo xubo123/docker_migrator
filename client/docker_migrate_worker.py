@@ -28,7 +28,9 @@ class docker_lm_worker(object):
         self._mnt_diff_ids = self.get_mnt_diff_ids()
         self._volumes_names = self.get_volumes_name()
         self.load_ct_config(docker_dir)
-    
+
+    def init_dst(self):
+		pass    
     def get_full_ctid(self):
         container_dirlist = os.listdir(os.path.join(docker_dir,"containers"))
         full_id = ""
