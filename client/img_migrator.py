@@ -88,7 +88,7 @@ class lm_docker_img(object):
 		start = time.time()
 		cdir = self.image_dir()
 
-		dest_rpc_caller.start_accept_images(img_migrator.IMGDIR)
+		dest_rpc_caller.start_accept_images(lm_docker_img.IMGDIR)
 		tf = img_tar(sk, cdir)
 
 		logging.info("\tPack")
