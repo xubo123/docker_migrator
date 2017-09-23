@@ -72,7 +72,7 @@ class migration_iter_controller(object):
 			# Handle final FS and images sync on frozen htype
 		logging.info("Final FS and images sync")
 		fsstats = self.fs.stop_migration()
-		self.img.sync_imgs_to_target(self.target_host, self.htype,self.connection.mem_sk)
+		self.img.sync_imgs_to_target(self.dest_rpc_caller, self._migrate_worker,self.connection.fdmem)
 
 			# Restore htype on target
 		logging.info("Asking target host to restore")
