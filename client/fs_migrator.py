@@ -34,6 +34,7 @@ class lm_docker_fs(object):
 			ret = sp.call(
 				["rsync", "-a", dir_name, dst],
 				stdout=logf, stderr=logf)
+                        logging.info("rsync -a "+dir_name+" "+dst)
 			if ret != 0:
 				raise Exception("Rsync failed")
 

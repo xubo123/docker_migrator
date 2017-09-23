@@ -1,0 +1,2 @@
+rsync error: unexplained error (code 130) at rsync.c(632) [sender=3.1.1]
+rsync: [sender] write error: Broken pipe (32)

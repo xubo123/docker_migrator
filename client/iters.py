@@ -5,6 +5,7 @@ import client.rpc_client
 import client.docker_migrate_worker
 import tool.criu_api
 import tool.criu_req
+import client.mstats
 
 MIGRATION_MODE_LIVE = "live"
 MIGRATION_MODE_RESTART = "restart"
@@ -49,7 +50,7 @@ class migration_iter_controller(object):
         self.__validate_cpu()
         self.__validate_criu_version
         root_pid = self._migrate_worker.root_task_pid()
-        migration_stats = mstats.live_stats()
+        migration_stats = client.mstats.live_stats()
 	migration_stats.handle_start()
 
         # Step1 : FS migration

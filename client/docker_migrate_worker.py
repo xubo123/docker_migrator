@@ -34,7 +34,7 @@ class docker_lm_worker(object):
         full_id = ""
         for container_dir in container_dirlist:
             container_dir = container_dir.rsplit("/")
-            if container_dir[0].find(self._ct_id):
+            if (container_dir[0].find(self._ct_id)==0):
                 full_id = container_dir[0]
                 break
         if full_id!="":
