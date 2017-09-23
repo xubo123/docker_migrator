@@ -7,6 +7,7 @@ from subprocess import PIPE
 import time
 import client.fs_migrator
 
+docker_bin = "/usr/bin/docker"
 docker_dir = "/var/lib/docker/"
 docker_run_state_dir = "/var/run/runc/"
 docker_run_meta_dir = "/run/runc/"
