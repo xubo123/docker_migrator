@@ -187,17 +187,17 @@ class docker_lm_worker(object):
         log_fd = open("/tmp/docker_checkpoint.log","w+")
         image_path_opt = "--checkpoint-dir="+ img.image_dir()
         ret = sp.call([docker_bin, "checkpoint","create", image_path_opt, self._ct_id,self.get_ck_dir()],
-                                        stdout=logf, stderr=logf)
+                                        stdout=log_fd, stderr=log_fd)
         if ret != 0:
 			raise Exception("docker checkpoint failed")
 
     
     def final_restore(self, img, criu,ck_dir):
-		logf = open("/tmp/docker_restore.log", "w+")
+		log_fd = open("/tmp/docker_restore.log", "w+")
 		image_path_opt = "--checkpoint-dir=" + img.image_dir()
 	        logging.info("restore command:%s",[docker_bin, "start", image_path_opt,"--checkpoint="+ck_dir, self._ct_id])
          	ret = sp.call([docker_bin, "start", image_path_opt,"--checkpoint=mysql_checkpoint", self._ct_id],
-					stdout=logf, stderr=logf)
+					stdout=log_fd, stderr=log_fd)
 		if ret != 0:
 			raise Exception("docker restore failed")
     
