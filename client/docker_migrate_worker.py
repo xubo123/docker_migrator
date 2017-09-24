@@ -28,6 +28,7 @@ class docker_lm_worker(object):
         self.diff_ids = self.get_diff_id()
         self._mnt_diff_ids = self.get_mnt_diff_ids()
         self._volumes_names = self.get_volumes_name()
+        self.load_fs_dir()
         self.load_ct_config(docker_dir)
 
     def init_dst(self):
@@ -50,14 +51,10 @@ class docker_lm_worker(object):
     
     def root_task_pid(self):
 		return self.full_ctid
-
-    def load_ct_config(self,path):
+    def load_fs_dir(self):
         #/var/lib/docker/aufs/mnt/mnt_id
         self._ct_rootfs = os.path.join(
                         docker_dir, "aufs/mnt", self._mnt_id)
-        #config.v2.json
-        self._ct_config_dir = os.path.join(
-                        docker_dir, "containers", self.full_ctid)
         #layers relationship /var/lib/docker/image/aufs/layerdb/mounts
         self._ct_layerdb_dir = os.path.join(docker_dir,"image/aufs/layerdb/mounts",self.full_ctid)
         #layers relationship /var/lib/docker/image/aufs/layerdb/sha256
@@ -75,16 +72,21 @@ class docker_lm_worker(object):
         for volumes_name in self._volumes_names :
               volumes_dir = os.path.join(docker_dir,"volumes",volumes_name)
               self._ct_volumes_dirs.append(volumes_dir)
+        logging.info("Container rootfs: %s", self._ct_rootfs)
+        logging.info("Container mounts_dir: %s", self._ct_layerdb_dir)
+        logging.info("Container diff : %s",self._ct_diff_dirs)
+        logging.info("Container volumes : %s",self._ct_volumes_dirs)
+
+    def load_ct_config(self,path):
+        #config.v2.json
+        self._ct_config_dir = os.path.join(
+                        docker_dir, "containers", self.full_ctid)
         #/run/runc
         self._ct_run_meta_dir = os.path.join(
                         docker_run_meta_dir, self.full_ctid)
         self._ct_run_state_dir = os.path.join(
 			docker_run_state_dir, self.full_ctid)
-        logging.info("Container rootfs: %s", self._ct_rootfs)
         logging.info("Container config: %s", self._ct_config_dir)
-        logging.info("Container mounts_dir: %s", self._ct_layerdb_dir)
-        logging.info("Container diff : %s",self._ct_diff_dirs)
-        logging.info("Container volumes : %s",self._ct_volumes_dirs)
         logging.info("Container meta: %s", self._ct_run_meta_dir)
         logging.info("Container state: %s", self._ct_run_state_dir)
 
@@ -176,11 +178,7 @@ class docker_lm_worker(object):
         # Create docker runtime meta dir on dst side
         logging.info("ctid=====%s",self._ct_id)
         self.full_ctid = self.get_full_ctid()
-        self._mnt_id = self.get_mount_id()
-        self.diff_ids = self.get_diff_id()
-        self._mnt_diff_ids = self.get_mnt_diff_ids()
-        self._volumes_names = self.get_volumes_name()
-	self.load_ct_config(docker_dir)    
+      	self.load_ct_config(docker_dir)    
 
     def final_dump(self,pid,img,criu_connection,fs):
         logging.info("Last dump container %s",pid)
@@ -197,7 +195,7 @@ class docker_lm_worker(object):
 		log_fd = open("/tmp/docker_restore.log", "w+")
 		image_path_opt = "--checkpoint-dir=" + img.image_dir()
 	        logging.info("restore command:%s",[docker_bin, "start", image_path_opt,"--checkpoint="+ck_dir, self._ct_id])
-         	ret = sp.call([docker_bin, "start", image_path_opt,"--checkpoint=mysql_checkpoint", self._ct_id],
+         	ret = sp.call([docker_bin, "start", image_path_opt,"--checkpoint="+self.get_ck_dir(), self._ct_id],
 					stdout=log_fd, stderr=log_fd)
 		if ret != 0:
 			raise Exception("docker restore failed")

@@ -8,7 +8,7 @@ import time
 import tool.util
 import tool.criu_api
 
-def_path = "val/local/docker_migrator_ck"
+def_path = "/val/local/docker_migrator_ck"
 
 class opendir(object):
 	def __init__(self, path):
@@ -151,12 +151,12 @@ class lm_docker_img(object):
         tf.close()
         dest_rpc_caller.stop_accept_images()
     
-    def start_accept_images(self, dir_id, sk):
+    def start_accept_images(self, dir_id,migrate_worker,sk):
 		if dir_id == lm_docker_img.WDIR:
 			dirname = self.work_dir()
 		else:
 			dirname = self.image_dir()
-                        dirname = os.path.join(dirname,"mysql_checkpoint")
+                        dirname = os.path.join(dirname,migrate_worker.get_ck_dir())
 		self.__acc_tar = untar_thread(sk, dirname)
 		self.__acc_tar.start()
 		logging.info("Started images server")

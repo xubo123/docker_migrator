@@ -50,7 +50,7 @@ class rpc_migrate_service(object):
 	    self.img.set_options(opts)
     
     def rpc_start_accept_images(self, dir_id):
-         self.img.start_accept_images(dir_id, self.connection.fdmem)
+         self.img.start_accept_images(dir_id,self._migrate_worker,self.connection.fdmem)
 
     def rpc_stop_accept_images(self):
          self.img.stop_accept_images()
