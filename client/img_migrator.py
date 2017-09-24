@@ -92,13 +92,19 @@ class lm_docker_img(object):
 		tf = img_tar(sk, cdir)
 
 		logging.info("\tPack")
-		for img in filter(lambda x: x.endswith(".img"), os.listdir(cdir)):
+                ck_dir = os.path.join(cdir,migrate_worker.get_ck_dir())
+		for img in filter(lambda x: x.endswith(".img"), os.listdir(ck_dir)):
 			tf.add(img)
 
 		logging.info("\tAdd migrate_worker images")
-		for himg in migrate_worker.get_meta_images(os.path.join(cdir,migrate_worker.get_ck_dir())):
+		for himg in migrate_worker.get_meta_images(ck_dir):
 			tf.add(himg[1], himg[0])
+                criu_work_dir = ck_dir+"/criu.work"
+                target_imagepath =dest_rpc_caller.get_image_dir()
+                dst = "%s:%s" % (thost,os.path.join(target_imagepath,migrate_worker.get_ck_dir()))
 
+                sp.call(["rsync","-a",criu_work_dir,dst])
+                logging.info("Command: rsync -a %s %s",criu_work_dir,dst)
 		tf.close()
 		dest_rpc_caller.stop_accept_images()
 

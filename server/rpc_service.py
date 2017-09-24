@@ -90,3 +90,6 @@ class rpc_migrate_service(object):
 	self._migrate_worker.final_restore(self.img, self.criu_connection,ck_dir)
 	logging.info("Restore succeeded")
 	self.restored = True
+    def rpc_get_image_dir(self):
+        return self.img.image_dir()
+
