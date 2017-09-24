@@ -37,6 +37,7 @@ class migration_iter_controller(object):
         self.__skip_cpu_check = opts["skip_cpu_check"]
         self.__skip_criu_check = opts["skip_criu_check"]
         self._migrate_worker.set_options(opts)
+        self._thost = opts["to"]
 	self.fs.set_options(opts)
 	if self.img:
 		self.img.set_options(opts)
@@ -71,7 +72,7 @@ class migration_iter_controller(object):
 			# Handle final FS and images sync on frozen htype
 		logging.info("Final FS and images sync")
 		fsstats = self.fs.stop_migration()
-		self.img.sync_imgs_to_target(self.dest_rpc_caller, self._migrate_worker,self.connection.fdmem)
+		self.img.sync_imgs_to_target(self.dest_rpc_caller, self._migrate_worker,self.connection.fdmem,self._thost)
 
 			# Restore htype on target
 		logging.info("Asking target host to restore")

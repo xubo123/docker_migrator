@@ -7,7 +7,7 @@ import threading
 import time
 import tool.util
 import tool.criu_api
-
+import subprocess as sp
 def_path = "/var/local/docker_migrator_ck"
 
 class opendir(object):
@@ -80,19 +80,19 @@ class lm_docker_img(object):
 		self._img_path = os.path.join(self._work_dir.name(), "img")
 		os.mkdir(self._img_path)
     
-    def sync_imgs_to_target(self, dest_rpc_caller, migrate_worker, sk):
+    def sync_imgs_to_target(self, dest_rpc_caller, migrate_worker, sk,thost):
 		# Pre-dump doesn't generate any images (yet?)
 		# so copy only those from the top dir
 		logging.info("Sending images to target")
 
 		start = time.time()
 		cdir = self.image_dir()
-
+                ck_dir = os.path.join(cdir,migrate_worker.get_ck_dir())
 		dest_rpc_caller.start_accept_images(lm_docker_img.IMGDIR)
-		tf = img_tar(sk, cdir)
+		tf = img_tar(sk, ck_dir)
 
 		logging.info("\tPack")
-                ck_dir = os.path.join(cdir,migrate_worker.get_ck_dir())
+                logging.info("ck_dir:===== %s",ck_dir)
 		for img in filter(lambda x: x.endswith(".img"), os.listdir(ck_dir)):
 			tf.add(img)
 
