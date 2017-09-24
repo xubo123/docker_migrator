@@ -1,0 +1,762 @@
+(00.000071) ========================================
+(00.000087) Dumping processes (pid: 17619)
+(00.000089) ========================================
+(00.000091) Running pre-dump scripts
+(00.000094) 	RPC
+(00.000189) Loaded kdat cache from /run/criu.kdat
+(00.000214) irmap: Searching irmap cache in work dir
+(00.000223) No irmap-cache image
+(00.000225) irmap: Searching irmap cache in parent
+(00.000228) irmap: No irmap cache
+(00.000253) cpu: fpu:1 fxsr:1 xsave:1
+(00.000312) vdso: Parsing at 7fff00be6000 7fff00be8000
+(00.000316) vdso: PT_LOAD p_vaddr: 0
+(00.000317) vdso: DT_HASH: 120
+(00.000318) vdso: DT_STRTAB: 2b0
+(00.000319) vdso: DT_SYMTAB: 1a8
+(00.000320) vdso: DT_STRSZ: 5e
+(00.000321) vdso: DT_SYMENT: 18
+(00.000322) vdso: nbucket 3 nchain b bucket 7fff00be6128 chain 7fff00be6134
+(00.000326) vdso: rt [vdso] 7fff00be6000-7fff00be8000 [vvar] 7fff00be4000-7fff00be6000
+(00.000335) cg-prop: Parsing controller "cpu"
+(00.000337) cg-prop: 	Strategy "replace"
+(00.000340) cg-prop: 	Property "cpu.shares"
+(00.000341) cg-prop: 	Property "cpu.cfs_period_us"
+(00.000342) cg-prop: 	Property "cpu.cfs_quota_us"
+(00.000343) cg-prop: 	Property "cpu.rt_period_us"
+(00.000344) cg-prop: 	Property "cpu.rt_runtime_us"
+(00.000346) cg-prop: Parsing controller "memory"
+(00.000347) cg-prop: 	Strategy "replace"
+(00.000348) cg-prop: 	Property "memory.limit_in_bytes"
+(00.000349) cg-prop: 	Property "memory.memsw.limit_in_bytes"
+(00.000350) cg-prop: 	Property "memory.swappiness"
+(00.000351) cg-prop: 	Property "memory.soft_limit_in_bytes"
+(00.000352) cg-prop: 	Property "memory.move_charge_at_immigrate"
+(00.000353) cg-prop: 	Property "memory.oom_control"
+(00.000354) cg-prop: 	Property "memory.use_hierarchy"
+(00.000356) cg-prop: 	Property "memory.kmem.limit_in_bytes"
+(00.000357) cg-prop: 	Property "memory.kmem.tcp.limit_in_bytes"
+(00.000358) cg-prop: Parsing controller "cpuset"
+(00.000359) cg-prop: 	Strategy "replace"
+(00.000360) cg-prop: 	Property "cpuset.cpus"
+(00.000361) cg-prop: 	Property "cpuset.mems"
+(00.000362) cg-prop: 	Property "cpuset.memory_migrate"
+(00.000363) cg-prop: 	Property "cpuset.cpu_exclusive"
+(00.000364) cg-prop: 	Property "cpuset.mem_exclusive"
+(00.000365) cg-prop: 	Property "cpuset.mem_hardwall"
+(00.000366) cg-prop: 	Property "cpuset.memory_spread_page"
+(00.000367) cg-prop: 	Property "cpuset.memory_spread_slab"
+(00.000368) cg-prop: 	Property "cpuset.sched_load_balance"
+(00.000369) cg-prop: 	Property "cpuset.sched_relax_domain_level"
+(00.000370) cg-prop: Parsing controller "blkio"
+(00.000372) cg-prop: 	Strategy "replace"
+(00.000373) cg-prop: 	Property "blkio.weight"
+(00.000374) cg-prop: Parsing controller "freezer"
+(00.000375) cg-prop: 	Strategy "replace"
+(00.000376) cg-prop: Parsing controller "perf_event"
+(00.000377) cg-prop: 	Strategy "replace"
+(00.000378) cg-prop: Parsing controller "net_cls"
+(00.000379) cg-prop: 	Strategy "replace"
+(00.000380) cg-prop: 	Property "net_cls.classid"
+(00.000381) cg-prop: Parsing controller "net_prio"
+(00.000382) cg-prop: 	Strategy "replace"
+(00.000383) cg-prop: 	Property "net_prio.ifpriomap"
+(00.000384) cg-prop: Parsing controller "pids"
+(00.000386) cg-prop: 	Strategy "replace"
+(00.000387) cg-prop: 	Property "pids.max"
+(00.000388) cg-prop: Parsing controller "devices"
+(00.000389) cg-prop: 	Strategy "replace"
+(00.000390) cg-prop: 	Property "devices.list"
+(00.000417) Perparing image inventory (version 1)
+(00.000432) Add pid ns 1 pid 17763
+(00.000439) Add net ns 2 pid 17763
+(00.000443) Add ipc ns 3 pid 17763
+(00.000447) Add uts ns 4 pid 17763
+(00.000450) Add mnt ns 5 pid 17763
+(00.000454) Add user ns 6 pid 17763
+(00.000490) Add cgroup ns 7 pid 17763
+(00.000495) cg: Dumping cgroups for 17763
+(00.000512) cg:  `- New css ID 1
+(00.000514) cg:     `- [blkio] -> [/user.slice] [0]
+(00.000515) cg:     `- [cpu,cpuacct] -> [/user.slice] [0]
+(00.000516) cg:     `- [cpuset] -> [/] [0]
+(00.000517) cg:     `- [devices] -> [/user.slice] [0]
+(00.000518) cg:     `- [freezer] -> [/] [0]
+(00.000519) cg:     `- [hugetlb] -> [/] [0]
+(00.000520) cg:     `- [memory] -> [/user.slice] [0]
+(00.000521) cg:     `- [name=systemd] -> [/user.slice/user-1000.slice/session-c2.scope] [0]
+(00.000542) cg:     `- [net_cls,net_prio] -> [/] [0]
+(00.000544) cg:     `- [perf_event] -> [/] [0]
+(00.000545) cg:     `- [pids] -> [/user.slice/user-1000.slice] [0]
+(00.000546) cg: Set 1 is criu one
+(00.000629) Seized task 17619, state 1
+(00.000646) Collected (4 attempts, 0 in_progress)
+(00.000655) Collected (4 attempts, 0 in_progress)
+(00.000658) Collected 17619 in 1 state
+(00.000668) Will take pid namespace in the image
+(00.000670) Add pid ns 8 pid 17619
+(00.000674) Will take net namespace in the image
+(00.000675) Add net ns 9 pid 17619
+(00.000678) Will take ipc namespace in the image
+(00.000679) Add ipc ns 10 pid 17619
+(00.000683) Will take uts namespace in the image
+(00.000684) Add uts ns 11 pid 17619
+(00.000687) Will take mnt namespace in the image
+(00.000688) Add mnt ns 12 pid 17619
+(00.000694) Lock network
+(00.000695) Running network-lock scripts
+(00.000697) 	RPC
+(00.004150) 	type aufs source none mnt_id 176 s_dev 0x2a / @ ./ flags 0x200000 options si=af353141c5fa1ab0,dio,dirperm1
+(00.004260) Collecting AUFS branch pathnames ...
+(00.004775) /sys/fs/aufs/si_af353141c5fa1ab0/br0 : /var/lib/docker/aufs/diff/b3c1d5cedb1ace4639aa5fe0e992e147f09e10bac3ebd85271a2d11916d4cd30
+(00.004812) /sys/fs/aufs/si_af353141c5fa1ab0/br1 : /var/lib/docker/aufs/diff/b3c1d5cedb1ace4639aa5fe0e992e147f09e10bac3ebd85271a2d11916d4cd30-init
+(00.004832) /sys/fs/aufs/si_af353141c5fa1ab0/br2 : /var/lib/docker/aufs/diff/308b32ad95aa8bbd41f4a232ea769db2ad3331349dd4440cc85d103a1f62c226
+(00.004856) /sys/fs/aufs/si_af353141c5fa1ab0/br3 : /var/lib/docker/aufs/diff/d04ca7126f60169db8f16e9aa14388e889bb5c6de6847765b70911d9fef9ee62
+(00.004876) /sys/fs/aufs/si_af353141c5fa1ab0/br4 : /var/lib/docker/aufs/diff/beec92f87872472aefe95c0dcc6f599ba5c4c353116524dcdc778c1969f58c32
+(00.004892) /sys/fs/aufs/si_af353141c5fa1ab0/br5 : /var/lib/docker/aufs/diff/5902d19bac2f798e2a19a43e669d4b79a8c4ecba41f9864e56015e423456ea80
+(00.004912) /sys/fs/aufs/si_af353141c5fa1ab0/br6 : /var/lib/docker/aufs/diff/c2e63dcd75665c3bef9af74a0af1be0682fcc605ac4c3f8eaf12e325193eb705
+(00.005022) /sys/fs/aufs/si_af353141c5fa1ab0/br7 : /var/lib/docker/aufs/diff/3f76c441ab6ce10b52da45232b0cea9c2dfd6f553869885877ef3f246cbeedca
+(00.005046) /sys/fs/aufs/si_af353141c5fa1ab0/br8 : /var/lib/docker/aufs/diff/bd8b68665fc0fed0d4cb01542498e87590c46fd5c5a2035beeae61e39b2b5ec3
+(00.005066) /sys/fs/aufs/si_af353141c5fa1ab0/br9 : /var/lib/docker/aufs/diff/8ac93cfd5fe9d16857d1ef60d9d2e517ac818b8bcee50b9487b695a202a8c204
+(00.005083) /sys/fs/aufs/si_af353141c5fa1ab0/br10 : /var/lib/docker/aufs/diff/0c5745326228b0f2f3f31fe9e9e496dc0c2c73086c462598bd9b8373fcb59a87
+(00.005102) /sys/fs/aufs/si_af353141c5fa1ab0/br11 : /var/lib/docker/aufs/diff/954ed862d4587a285f501e82a0db50a9b1321d7f269db72cf0b66a33f9bbea65
+(00.005120) /sys/fs/aufs/si_af353141c5fa1ab0/br12 : /var/lib/docker/aufs/diff/01da23b06d3e0b2c650cc146f2c951baf91275acbb68511732849cacfd2f1cb2
+(00.005132) 	type proc source proc mnt_id 177 s_dev 0x2f / @ ./proc flags 0x20000e options 
+(00.005138) 	type tmpfs source tmpfs mnt_id 178 s_dev 0x30 / @ ./dev flags 0x1000002 options mode=755
+(00.005147) 	type devpts source devpts mnt_id 179 s_dev 0x31 / @ ./dev/pts flags 0x20000a options gid=5,mode=620,ptmxmode=666
+(00.005176) 	type sysfs source sysfs mnt_id 189 s_dev 0x32 / @ ./sys flags 0x20000f options 
+(00.005181) 	type tmpfs source tmpfs mnt_id 211 s_dev 0x33 / @ ./sys/fs/cgroup flags 0x20000f options mode=755
+(00.005187) 	type cgroup source cgroup mnt_id 214 s_dev 0x19 /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/systemd flags 0x20000f options xattr,release_agent=/lib/systemd/systemd-cgroups-agent,name=systemd
+(00.005193) 	type cgroup source cgroup mnt_id 215 s_dev 0x1b /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/blkio flags 0x20000f options blkio
+(00.005225) 	type cgroup source cgroup mnt_id 216 s_dev 0x1c /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/cpuset flags 0x20000f options cpuset
+(00.005323) 	type cgroup source cgroup mnt_id 217 s_dev 0x1d /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/devices flags 0x20000f options devices
+(00.005333) 	type cgroup source cgroup mnt_id 218 s_dev 0x1e /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/net_cls,net_prio flags 0x20000f options net_cls,net_prio
+(00.005337) 	type cgroup source cgroup mnt_id 219 s_dev 0x1f /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/pids flags 0x20000f options pids
+(00.005341) 	type cgroup source cgroup mnt_id 220 s_dev 0x20 /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/cpu,cpuacct flags 0x20000f options cpu,cpuacct
+(00.005345) 	type cgroup source cgroup mnt_id 221 s_dev 0x21 /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/perf_event flags 0x20000f options perf_event
+(00.005348) 	type cgroup source cgroup mnt_id 222 s_dev 0x22 /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/freezer flags 0x20000f options freezer
+(00.005392) 	type cgroup source cgroup mnt_id 223 s_dev 0x23 /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/hugetlb flags 0x20000f options hugetlb
+(00.005396) 	type cgroup source cgroup mnt_id 224 s_dev 0x24 /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/memory flags 0x20000f options memory
+(00.005402) 	type mqueue source mqueue mnt_id 225 s_dev 0x2e / @ ./dev/mqueue flags 0x20000e options 
+(00.005407) 	type ext4 source /dev/sda1 mnt_id 226 s_dev 0x800001 /var/lib/docker/containers/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/resolv.conf @ ./etc/resolv.conf flags 0x200000 options errors=remount-ro,data=ordered
+(00.005415) 	type ext4 source /dev/sda1 mnt_id 227 s_dev 0x800001 /var/lib/docker/containers/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/hostname @ ./etc/hostname flags 0x200000 options errors=remount-ro,data=ordered
+(00.005426) 	type ext4 source /dev/sda1 mnt_id 228 s_dev 0x800001 /var/lib/docker/containers/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/hosts @ ./etc/hosts flags 0x200000 options errors=remount-ro,data=ordered
+(00.005446) 	type tmpfs source shm mnt_id 229 s_dev 0x2d / @ ./dev/shm flags 0x20000e options size=65536k
+(00.005451) 	type ext4 source /dev/sda1 mnt_id 230 s_dev 0x800001 /var/lib/docker/volumes/6c5a555b65dc5d2fd3c813d24d80b96e2031978057b2a348ceb47ee81141d713/_data @ ./var/lib/mysql flags 0x200000 options errors=remount-ro,data=ordered
+(00.005455) 	type proc source proc mnt_id 102 s_dev 0x2f /asound @ ./proc/asound flags 0x20000f options 
+(00.005458) 	type proc source proc mnt_id 104 s_dev 0x2f /bus @ ./proc/bus flags 0x20000f options 
+(00.005462) 	type proc source proc mnt_id 105 s_dev 0x2f /fs @ ./proc/fs flags 0x20000f options 
+(00.005466) 	type proc source proc mnt_id 106 s_dev 0x2f /irq @ ./proc/irq flags 0x20000f options 
+(00.005480) 	type proc source proc mnt_id 107 s_dev 0x2f /sys @ ./proc/sys flags 0x20000f options 
+(00.005484) 	type proc source proc mnt_id 108 s_dev 0x2f /sysrq-trigger @ ./proc/sysrq-trigger flags 0x20000f options 
+(00.005488) 	type tmpfs source tmpfs mnt_id 109 s_dev 0x30 /null @ ./proc/kcore flags 0x1000002 options mode=755
+(00.005492) 	type tmpfs source tmpfs mnt_id 110 s_dev 0x30 /null @ ./proc/timer_list flags 0x1000002 options mode=755
+(00.005495) 	type tmpfs source tmpfs mnt_id 111 s_dev 0x30 /null @ ./proc/timer_stats flags 0x1000002 options mode=755
+(00.005500) 	type tmpfs source tmpfs mnt_id 112 s_dev 0x30 /null @ ./proc/sched_debug flags 0x1000002 options mode=755
+(00.005504) 	type tmpfs source tmpfs mnt_id 113 s_dev 0x34 / @ ./sys/firmware flags 0x200001 options 
+(00.005508) mnt: Building mountpoints tree
+(00.005510) mnt: 	Building plain mount tree
+(00.005511) mnt: 		Working on 113->189
+(00.005512) mnt: 		Working on 112->177
+(00.005513) mnt: 		Working on 111->177
+(00.005517) mnt: 		Working on 110->177
+(00.005518) mnt: 		Working on 109->177
+(00.005519) mnt: 		Working on 108->177
+(00.005520) mnt: 		Working on 107->177
+(00.005521) mnt: 		Working on 106->177
+(00.005522) mnt: 		Working on 105->177
+(00.005523) mnt: 		Working on 104->177
+(00.005524) mnt: 		Working on 102->177
+(00.005525) mnt: 		Working on 230->176
+(00.005526) mnt: 		Working on 229->178
+(00.005527) mnt: 		Working on 228->176
+(00.005528) mnt: 		Working on 227->176
+(00.005529) mnt: 		Working on 226->176
+(00.005530) mnt: 		Working on 225->178
+(00.005531) mnt: 		Working on 224->211
+(00.005532) mnt: 		Working on 223->211
+(00.005533) mnt: 		Working on 222->211
+(00.005534) mnt: 		Working on 221->211
+(00.005535) mnt: 		Working on 220->211
+(00.005536) mnt: 		Working on 219->211
+(00.005537) mnt: 		Working on 218->211
+(00.005538) mnt: 		Working on 217->211
+(00.005539) mnt: 		Working on 216->211
+(00.005540) mnt: 		Working on 215->211
+(00.005541) mnt: 		Working on 214->211
+(00.005542) mnt: 		Working on 211->189
+(00.005543) mnt: 		Working on 189->176
+(00.005544) mnt: 		Working on 179->178
+(00.005545) mnt: 		Working on 178->176
+(00.005546) mnt: 		Working on 177->176
+(00.005547) mnt: 		Working on 176->101
+(00.005548) mnt: 	Resorting siblings on 176
+(00.005549) mnt: 	Resorting siblings on 230
+(00.005550) mnt: 	Resorting siblings on 228
+(00.005551) mnt: 	Resorting siblings on 227
+(00.005552) mnt: 	Resorting siblings on 226
+(00.005553) mnt: 	Resorting siblings on 189
+(00.005554) mnt: 	Resorting siblings on 113
+(00.005555) mnt: 	Resorting siblings on 211
+(00.005556) mnt: 	Resorting siblings on 224
+(00.005557) mnt: 	Resorting siblings on 223
+(00.005558) mnt: 	Resorting siblings on 222
+(00.005559) mnt: 	Resorting siblings on 221
+(00.005560) mnt: 	Resorting siblings on 220
+(00.005561) mnt: 	Resorting siblings on 219
+(00.005562) mnt: 	Resorting siblings on 218
+(00.005563) mnt: 	Resorting siblings on 217
+(00.005564) mnt: 	Resorting siblings on 216
+(00.005565) mnt: 	Resorting siblings on 215
+(00.005566) mnt: 	Resorting siblings on 214
+(00.005567) mnt: 	Resorting siblings on 178
+(00.005568) mnt: 	Resorting siblings on 229
+(00.005569) mnt: 	Resorting siblings on 225
+(00.005570) mnt: 	Resorting siblings on 179
+(00.005571) mnt: 	Resorting siblings on 177
+(00.005572) mnt: 	Resorting siblings on 112
+(00.005573) mnt: 	Resorting siblings on 111
+(00.005574) mnt: 	Resorting siblings on 110
+(00.005574) mnt: 	Resorting siblings on 109
+(00.005575) mnt: 	Resorting siblings on 108
+(00.005576) mnt: 	Resorting siblings on 107
+(00.005577) mnt: 	Resorting siblings on 106
+(00.005578) mnt: 	Resorting siblings on 105
+(00.005579) mnt: 	Resorting siblings on 104
+(00.005580) mnt: 	Resorting siblings on 102
+(00.005581) mnt: Done:
+(00.005582) mnt: [./](176->101)
+(00.005584) mnt:  [./sys](189->176)
+(00.005585) mnt:   [./sys/firmware](113->189)
+(00.005586) mnt:   <--
+(00.005587) mnt:   [./sys/fs/cgroup](211->189)
+(00.005588) mnt:    [./sys/fs/cgroup/memory](224->211)
+(00.005589) mnt:    <--
+(00.005590) mnt:    [./sys/fs/cgroup/systemd](214->211)
+(00.005591) mnt:    <--
+(00.005592) mnt:    [./sys/fs/cgroup/blkio](215->211)
+(00.005593) mnt:    <--
+(00.005594) mnt:    [./sys/fs/cgroup/cpuset](216->211)
+(00.005595) mnt:    <--
+(00.005596) mnt:    [./sys/fs/cgroup/devices](217->211)
+(00.005597) mnt:    <--
+(00.005598) mnt:    [./sys/fs/cgroup/net_cls,net_prio](218->211)
+(00.005599) mnt:    <--
+(00.005600) mnt:    [./sys/fs/cgroup/pids](219->211)
+(00.005601) mnt:    <--
+(00.005602) mnt:    [./sys/fs/cgroup/cpu,cpuacct](220->211)
+(00.005603) mnt:    <--
+(00.005604) mnt:    [./sys/fs/cgroup/perf_event](221->211)
+(00.005606) mnt:    <--
+(00.005606) mnt:    [./sys/fs/cgroup/freezer](222->211)
+(00.005608) mnt:    <--
+(00.005608) mnt:    [./sys/fs/cgroup/hugetlb](223->211)
+(00.005610) mnt:    <--
+(00.005610) mnt:   <--
+(00.005611) mnt:  <--
+(00.005612) mnt:  [./proc](177->176)
+(00.005613) mnt:   [./proc/sched_debug](112->177)
+(00.005615) mnt:   <--
+(00.005615) mnt:   [./proc/asound](102->177)
+(00.005617) mnt:   <--
+(00.005617) mnt:   [./proc/bus](104->177)
+(00.005619) mnt:   <--
+(00.005621) mnt:   [./proc/fs](105->177)
+(00.005622) mnt:   <--
+(00.005623) mnt:   [./proc/irq](106->177)
+(00.005624) mnt:   <--
+(00.005625) mnt:   [./proc/sys](107->177)
+(00.005626) mnt:   <--
+(00.005627) mnt:   [./proc/sysrq-trigger](108->177)
+(00.005628) mnt:   <--
+(00.005629) mnt:   [./proc/kcore](109->177)
+(00.005630) mnt:   <--
+(00.005631) mnt:   [./proc/timer_list](110->177)
+(00.005632) mnt:   <--
+(00.005633) mnt:   [./proc/timer_stats](111->177)
+(00.005634) mnt:   <--
+(00.005635) mnt:  <--
+(00.005636) mnt:  [./dev](178->176)
+(00.005637) mnt:   [./dev/shm](229->178)
+(00.005638) mnt:   <--
+(00.005639) mnt:   [./dev/pts](179->178)
+(00.005640) mnt:   <--
+(00.005641) mnt:   [./dev/mqueue](225->178)
+(00.005642) mnt:   <--
+(00.005643) mnt:  <--
+(00.005644) mnt:  [./etc/hosts](228->176)
+(00.005645) mnt:  <--
+(00.005646) mnt:  [./etc/resolv.conf](226->176)
+(00.005647) mnt:  <--
+(00.005648) mnt:  [./etc/hostname](227->176)
+(00.005649) mnt:  <--
+(00.005650) mnt:  [./var/lib/mysql](230->176)
+(00.005651) mnt:  <--
+(00.005652) mnt: <--
+(00.005659) mnt: Found /var/lib/mysql mapping for ./var/lib/mysql mountpoint
+(00.005660) mnt: Found /dev/shm mapping for ./dev/shm mountpoint
+(00.005662) mnt: Found /etc/hosts mapping for ./etc/hosts mountpoint
+(00.005663) mnt: Found /etc/hostname mapping for ./etc/hostname mountpoint
+(00.005664) mnt: Found /etc/resolv.conf mapping for ./etc/resolv.conf mountpoint
+(00.005666) mnt: Found /sys/fs/cgroup/memory mapping for ./sys/fs/cgroup/memory mountpoint
+(00.005667) mnt: Found /sys/fs/cgroup/hugetlb mapping for ./sys/fs/cgroup/hugetlb mountpoint
+(00.005668) mnt: Found /sys/fs/cgroup/freezer mapping for ./sys/fs/cgroup/freezer mountpoint
+(00.005670) mnt: Found /sys/fs/cgroup/perf_event mapping for ./sys/fs/cgroup/perf_event mountpoint
+(00.005671) mnt: Found /sys/fs/cgroup/cpu,cpuacct mapping for ./sys/fs/cgroup/cpu,cpuacct mountpoint
+(00.005672) mnt: Found /sys/fs/cgroup/pids mapping for ./sys/fs/cgroup/pids mountpoint
+(00.005674) mnt: Found /sys/fs/cgroup/net_cls,net_prio mapping for ./sys/fs/cgroup/net_cls,net_prio mountpoint
+(00.005675) mnt: Found /sys/fs/cgroup/devices mapping for ./sys/fs/cgroup/devices mountpoint
+(00.005676) mnt: Found /sys/fs/cgroup/cpuset mapping for ./sys/fs/cgroup/cpuset mountpoint
+(00.005677) mnt: Found /sys/fs/cgroup/blkio mapping for ./sys/fs/cgroup/blkio mountpoint
+(00.005679) mnt: Found /sys/fs/cgroup/systemd mapping for ./sys/fs/cgroup/systemd mountpoint
+(00.005682) mnt: Inspecting sharing on 113 shared_id 0 master_id 0 (@./sys/firmware)
+(00.005683) mnt: Inspecting sharing on 112 shared_id 0 master_id 0 (@./proc/sched_debug)
+(00.005685) mnt: 	The mount 111 is bind for 112 (@./proc/timer_stats -> @./proc/sched_debug)
+(00.005686) mnt: 	The mount 110 is bind for 112 (@./proc/timer_list -> @./proc/sched_debug)
+(00.005687) mnt: 	The mount 109 is bind for 112 (@./proc/kcore -> @./proc/sched_debug)
+(00.005689) mnt: 	The mount 178 is bind for 112 (@./dev -> @./proc/sched_debug)
+(00.005690) mnt: Inspecting sharing on 111 shared_id 0 master_id 0 (@./proc/timer_stats)
+(00.005691) mnt: Inspecting sharing on 110 shared_id 0 master_id 0 (@./proc/timer_list)
+(00.005692) mnt: Inspecting sharing on 109 shared_id 0 master_id 0 (@./proc/kcore)
+(00.005693) mnt: Inspecting sharing on 108 shared_id 0 master_id 0 (@./proc/sysrq-trigger)
+(00.005694) mnt: 	The mount 107 is bind for 108 (@./proc/sys -> @./proc/sysrq-trigger)
+(00.005695) mnt: 	The mount 106 is bind for 108 (@./proc/irq -> @./proc/sysrq-trigger)
+(00.005696) mnt: 	The mount 105 is bind for 108 (@./proc/fs -> @./proc/sysrq-trigger)
+(00.005697) mnt: 	The mount 104 is bind for 108 (@./proc/bus -> @./proc/sysrq-trigger)
+(00.005699) mnt: 	The mount 102 is bind for 108 (@./proc/asound -> @./proc/sysrq-trigger)
+(00.005700) mnt: 	The mount 177 is bind for 108 (@./proc -> @./proc/sysrq-trigger)
+(00.005701) mnt: Inspecting sharing on 107 shared_id 0 master_id 0 (@./proc/sys)
+(00.005702) mnt: Inspecting sharing on 106 shared_id 0 master_id 0 (@./proc/irq)
+(00.005703) mnt: Inspecting sharing on 105 shared_id 0 master_id 0 (@./proc/fs)
+(00.005706) mnt: Inspecting sharing on 104 shared_id 0 master_id 0 (@./proc/bus)
+(00.005707) mnt: Inspecting sharing on 102 shared_id 0 master_id 0 (@./proc/asound)
+(00.005708) mnt: Inspecting sharing on 230 shared_id 0 master_id 0 (@./var/lib/mysql)
+(00.005709) mnt: 	The mount 228 is bind for 230 (@./etc/hosts -> @./var/lib/mysql)
+(00.005710) mnt: 	The mount 227 is bind for 230 (@./etc/hostname -> @./var/lib/mysql)
+(00.005712) mnt: 	The mount 226 is bind for 230 (@./etc/resolv.conf -> @./var/lib/mysql)
+(00.005713) mnt: Inspecting sharing on 229 shared_id 0 master_id 0 (@./dev/shm)
+(00.005714) mnt: Inspecting sharing on 228 shared_id 0 master_id 0 (@./etc/hosts)
+(00.005715) mnt: Inspecting sharing on 227 shared_id 0 master_id 0 (@./etc/hostname)
+(00.005716) mnt: Inspecting sharing on 226 shared_id 0 master_id 0 (@./etc/resolv.conf)
+(00.005717) mnt: Inspecting sharing on 225 shared_id 0 master_id 0 (@./dev/mqueue)
+(00.005718) mnt: Inspecting sharing on 224 shared_id 0 master_id 0 (@./sys/fs/cgroup/memory)
+(00.005720) mnt: Inspecting sharing on 223 shared_id 0 master_id 0 (@./sys/fs/cgroup/hugetlb)
+(00.005721) mnt: Inspecting sharing on 222 shared_id 0 master_id 0 (@./sys/fs/cgroup/freezer)
+(00.005722) mnt: Inspecting sharing on 221 shared_id 0 master_id 0 (@./sys/fs/cgroup/perf_event)
+(00.005723) mnt: Inspecting sharing on 220 shared_id 0 master_id 0 (@./sys/fs/cgroup/cpu,cpuacct)
+(00.005724) mnt: Inspecting sharing on 219 shared_id 0 master_id 0 (@./sys/fs/cgroup/pids)
+(00.005725) mnt: Inspecting sharing on 218 shared_id 0 master_id 0 (@./sys/fs/cgroup/net_cls,net_prio)
+(00.005726) mnt: Inspecting sharing on 217 shared_id 0 master_id 0 (@./sys/fs/cgroup/devices)
+(00.005727) mnt: Inspecting sharing on 216 shared_id 0 master_id 0 (@./sys/fs/cgroup/cpuset)
+(00.005729) mnt: Inspecting sharing on 215 shared_id 0 master_id 0 (@./sys/fs/cgroup/blkio)
+(00.005730) mnt: Inspecting sharing on 214 shared_id 0 master_id 0 (@./sys/fs/cgroup/systemd)
+(00.005731) mnt: Inspecting sharing on 211 shared_id 0 master_id 0 (@./sys/fs/cgroup)
+(00.005732) mnt: Inspecting sharing on 189 shared_id 0 master_id 0 (@./sys)
+(00.005733) mnt: Inspecting sharing on 179 shared_id 0 master_id 0 (@./dev/pts)
+(00.005734) mnt: Inspecting sharing on 178 shared_id 0 master_id 0 (@./dev)
+(00.005735) mnt: Inspecting sharing on 177 shared_id 0 master_id 0 (@./proc)
+(00.005736) mnt: Inspecting sharing on 176 shared_id 0 master_id 0 (@./)
+(00.005743) Collecting netns 9/17619
+(00.005745) Switching to 17619's net for collecting sockets
+(00.014166) sk unix: 	Collected: ino 0x38b03 peer_ino 0 family    1 type    5 state  7 name (null)
+(00.014389) Collect netlink sock 0x38628
+(00.014396) Collect netlink sock 0x387ef
+(00.014397) Collect netlink sock 0x38b02
+(00.014398) Collect netlink sock 0x3872e
+(00.014399) Collect netlink sock 0x387b3
+(00.014400) Collect netlink sock 0x3872d
+(00.014401) Collect netlink sock 0x3862b
+(00.014402) Collect netlink sock 0x387b4
+(00.014403) Collect netlink sock 0x38629
+(00.014404) Collect netlink sock 0x3862a
+(00.014422) ========================================
+(00.014424) Dumping task (pid: 17619)
+(00.014425) ========================================
+(00.014426) Obtaining task stat ... 
+(00.014463) 
+(00.014464) Collecting mappings (pid: 17619)
+(00.014466) ----------------------------------------
+(00.014631) Dumping path for -3 fd via self 10 [/bin/dash]
+(00.014692) vma 565308634000 borrows vfi from previous 565308419000
+(00.014699) vma 565308637000 borrows vfi from previous 565308634000
+(00.014737) Dumping path for -3 fd via self 7 [/lib/x86_64-linux-gnu/libc-2.19.so]
+(00.014770) vma 7f3e6488d000 borrows vfi from previous 7f3e646ec000
+(00.014776) vma 7f3e64a8d000 borrows vfi from previous 7f3e6488d000
+(00.014780) vma 7f3e64a91000 borrows vfi from previous 7f3e64a8d000
+(00.014805) Dumping path for -3 fd via self 7 [/lib/x86_64-linux-gnu/ld-2.19.so]
+(00.014855) vma 7f3e64cb8000 borrows vfi from previous 7f3e64cb7000
+(00.014885) Collected, longest area occupies 512 pages
+(00.014887) 0x565308419000-0x565308435000 (112K) prot 0x5 flags 0x2 fdflags 0 st 0x41 off 0 reg fp  shmid: 0x1
+(00.014895) 0x565308634000-0x565308637000 (12K) prot 0x1 flags 0x2 fdflags 0 st 0x41 off 0x1b000 reg fp  shmid: 0x1
+(00.014897) 0x565308637000-0x565308638000 (4K) prot 0x3 flags 0x2 fdflags 0 st 0x41 off 0x1e000 reg fp  shmid: 0x1
+(00.014899) 0x565308638000-0x56530863a000 (8K) prot 0x3 flags 0x22 fdflags 0 st 0x201 off 0 reg ap  shmid: 0
+(00.014900) 0x565309eec000-0x565309f0d000 (132K) prot 0x3 flags 0x22 fdflags 0 st 0x221 off 0 reg heap ap  shmid: 0
+(00.014901) 0x7f3e646ec000-0x7f3e6488d000 (1668K) prot 0x5 flags 0x2 fdflags 0 st 0x41 off 0 reg fp  shmid: 0x2
+(00.014903) 0x7f3e6488d000-0x7f3e64a8d000 (2048K) prot 0 flags 0x2 fdflags 0 st 0x41 off 0x1a1000 reg fp  shmid: 0x2
+(00.014904) 0x7f3e64a8d000-0x7f3e64a91000 (16K) prot 0x1 flags 0x2 fdflags 0 st 0x41 off 0x1a1000 reg fp  shmid: 0x2
+(00.014905) 0x7f3e64a91000-0x7f3e64a93000 (8K) prot 0x3 flags 0x2 fdflags 0 st 0x41 off 0x1a5000 reg fp  shmid: 0x2
+(00.014907) 0x7f3e64a93000-0x7f3e64a97000 (16K) prot 0x3 flags 0x22 fdflags 0 st 0x201 off 0 reg ap  shmid: 0
+(00.014908) 0x7f3e64a97000-0x7f3e64ab8000 (132K) prot 0x5 flags 0x2 fdflags 0 st 0x41 off 0 reg fp  shmid: 0x3
+(00.014909) 0x7f3e64cb0000-0x7f3e64cb3000 (12K) prot 0x3 flags 0x22 fdflags 0 st 0x201 off 0 reg ap  shmid: 0
+(00.014911) 0x7f3e64cb5000-0x7f3e64cb7000 (8K) prot 0x3 flags 0x22 fdflags 0 st 0x201 off 0 reg ap  shmid: 0
+(00.014912) 0x7f3e64cb7000-0x7f3e64cb8000 (4K) prot 0x1 flags 0x2 fdflags 0 st 0x41 off 0x20000 reg fp  shmid: 0x3
+(00.014913) 0x7f3e64cb8000-0x7f3e64cb9000 (4K) prot 0x3 flags 0x2 fdflags 0 st 0x41 off 0x21000 reg fp  shmid: 0x3
+(00.014915) 0x7f3e64cb9000-0x7f3e64cba000 (4K) prot 0x3 flags 0x22 fdflags 0 st 0x201 off 0 reg ap  shmid: 0
+(00.014916) 0x7ffd7c695000-0x7ffd7c6b7000 (136K) prot 0x3 flags 0x122 fdflags 0 st 0x201 off 0 reg ap  shmid: 0
+(00.014917) 0x7ffd7c788000-0x7ffd7c78a000 (8K) prot 0x1 flags 0x22 fdflags 0 st 0x1201 off 0 reg vvar ap  shmid: 0
+(00.014919) 0x7ffd7c78a000-0x7ffd7c78c000 (8K) prot 0x5 flags 0x22 fdflags 0 st 0x209 off 0 reg vdso ap  shmid: 0
+(00.014920) 0xffffffffff600000-0xffffffffff601000 (4K) prot 0x5 flags 0x22 fdflags 0 st 0x204 off 0 vsys ap  shmid: 0
+(00.014921) ----------------------------------------
+(00.014922) 
+(00.014923) Collecting fds (pid: 17619)
+(00.014924) ----------------------------------------
+(00.014936) Found 3 file descriptors
+(00.014937) ----------------------------------------
+(00.014943) Dump private signals of 17619
+(00.014947) Dump shared signals of 17619
+(00.014953) Parasite syscall_ip at 0x565308419000
+(00.015038) xsave runtime structure
+(00.015041) -----------------------
+(00.015042) cwd:37f swd:0 twd:0 fop:0 mxcsr:1f80 mxcsr_mask:ffff
+(00.015043) magic1:46505853 extended_size:344 xstate_bv:7 xstate_size:340
+(00.015045) xstate_bv: 7
+(00.015045) -----------------------
+(00.015125) sid=1 pgid=1 pid=1
+(00.015168) 
+(00.015171) Dumping opened files (pid: 17619)
+(00.015172) ----------------------------------------
+(00.015217) 17619 fdinfo 0: pos:                0 flags:                0/0
+(00.015232) Dumping pipe 11 with id 0x4 pipe_id 0x38605
+(00.015248) Dumping data from pipe 0x38605 fd 11
+(00.015274) fdinfo: type: 0x2 flags: 0/0 pos:        0 fd: 0
+(00.015292) 17619 fdinfo 1: pos:                0 flags:                1/0
+(00.015294) Dumping pipe 12 with id 0x5 pipe_id 0x38606
+(00.015296) fdinfo: type: 0x2 flags: 01/0 pos:        0 fd: 1
+(00.015302) 17619 fdinfo 2: pos:                0 flags:                1/0
+(00.015304) Dumping pipe 13 with id 0x6 pipe_id 0x38607
+(00.015306) fdinfo: type: 0x2 flags: 01/0 pos:        0 fd: 2
+(00.015307) ----------------------------------------
+(00.015741) 
+(00.015747) Dumping pages (type: 68 pid: 17619)
+(00.015748) ----------------------------------------
+(00.015750)    Private vmas 512/1085 pages
+(00.015759) pagemap-cache: created for pid 17619 (takes 4096 bytes)
+(00.015760) page-pipe: Create page pipe for 1085 segs
+(00.015762) page-pipe: Will grow page pipe (iov off is 0)
+(00.015782) pagemap-cache: filling VMA 565308419000-565308435000 (112K) [l:565308400000 h:565308600000]
+(00.015788) pagemap-cache: 	    565308419000-565308435000     nr:1     cov:114688
+(00.015789) pagemap-cache: 	simple mode [l:565308419000 h:565308435000]
+(00.015794) page-pipe: Add iov to page pipe (0 iovs, 0/1085 total)
+(00.015796) Pagemap generated: 1 pages 0 holes
+(00.015797) pagemap-cache: filling VMA 565308634000-565308637000 (12K) [l:565308600000 h:565308800000]
+(00.015798) pagemap-cache: 	    565308634000-565308637000     nr:1     cov:12288
+(00.015800) pagemap-cache: 	    565308637000-565308638000     nr:2     cov:16384
+(00.015801) pagemap-cache: 	    565308638000-56530863a000     nr:3     cov:24576
+(00.015802) pagemap-cache: 	cache  mode [l:565308634000 h:565308800000]
+(00.015806) page-pipe: Add iov to page pipe (1 iovs, 1/1085 total)
+(00.015807) Pagemap generated: 3 pages 0 holes
+(00.015808) Pagemap generated: 1 pages 0 holes
+(00.015809) page-pipe: Add iov to page pipe (2 iovs, 2/1085 total)
+(00.015810) Pagemap generated: 1 pages 0 holes
+(00.015811) pagemap-cache: filling VMA 565309eec000-565309f0d000 (132K) [l:565309e00000 h:56530a000000]
+(00.015814) page-pipe: Add iov to page pipe (3 iovs, 3/1085 total)
+(00.015815) Pagemap generated: 1 pages 0 holes
+(00.015816) pagemap-cache: filling VMA 7f3e646ec000-7f3e6488d000 (1668K) [l:7f3e64600000 h:7f3e64800000]
+(00.015837) Pagemap generated: 0 pages 0 holes
+(00.015839) pagemap-cache: filling VMA 7f3e6488d000-7f3e64a8d000 (2048K) [l:7f3e64800000 h:7f3e64a00000]
+(00.015846) Pagemap generated: 0 pages 0 holes
+(00.015847) pagemap-cache: filling VMA 7f3e64a8d000-7f3e64a91000 (16K) [l:7f3e64a00000 h:7f3e64c00000]
+(00.015849) page-pipe: Add iov to page pipe (4 iovs, 4/1085 total)
+(00.015850) Pagemap generated: 4 pages 0 holes
+(00.015851) pagemap-cache: filling VMA 7f3e64a91000-7f3e64a93000 (8K) [l:7f3e64a00000 h:7f3e64c00000]
+(00.015854) Pagemap generated: 2 pages 0 holes
+(00.015855) pagemap-cache: filling VMA 7f3e64a93000-7f3e64a97000 (16K) [l:7f3e64a00000 h:7f3e64c00000]
+(00.015858) page-pipe: Add iov to page pipe (5 iovs, 5/1085 total)
+(00.015859) Pagemap generated: 2 pages 0 holes
+(00.015860) pagemap-cache: filling VMA 7f3e64a97000-7f3e64ab8000 (132K) [l:7f3e64a00000 h:7f3e64c00000]
+(00.015862) Pagemap generated: 0 pages 0 holes
+(00.015863) pagemap-cache: filling VMA 7f3e64cb0000-7f3e64cb3000 (12K) [l:7f3e64c00000 h:7f3e64e00000]
+(00.015866) page-pipe: Add iov to page pipe (6 iovs, 6/1085 total)
+(00.015869) page-pipe: Grow pipe 10 -> 20
+(00.015870) Pagemap generated: 3 pages 0 holes
+(00.015871) pagemap-cache: filling VMA 7f3e64cb5000-7f3e64cb7000 (8K) [l:7f3e64c00000 h:7f3e64e00000]
+(00.015873) page-pipe: Add iov to page pipe (7 iovs, 7/1085 total)
+(00.015874) Pagemap generated: 2 pages 0 holes
+(00.015875) pagemap-cache: filling VMA 7f3e64cb7000-7f3e64cb8000 (4K) [l:7f3e64c00000 h:7f3e64e00000]
+(00.015877) Pagemap generated: 1 pages 0 holes
+(00.015878) pagemap-cache: filling VMA 7f3e64cb8000-7f3e64cb9000 (4K) [l:7f3e64c00000 h:7f3e64e00000]
+(00.015880) Pagemap generated: 1 pages 0 holes
+(00.015881) pagemap-cache: filling VMA 7f3e64cb9000-7f3e64cba000 (4K) [l:7f3e64c00000 h:7f3e64e00000]
+(00.015884) Pagemap generated: 1 pages 0 holes
+(00.015885) pagemap-cache: filling VMA 7ffd7c695000-7ffd7c6b7000 (136K) [l:7ffd7c600000 h:7ffd7c800000]
+(00.015887) page-pipe: Add iov to page pipe (8 iovs, 8/1085 total)
+(00.015889) Pagemap generated: 3 pages 0 holes
+(00.015890) pagemap-cache: filling VMA 7ffd7c788000-7ffd7c78a000 (8K) [l:7ffd7c600000 h:7ffd7c800000]
+(00.015891) Pagemap generated: 0 pages 0 holes
+(00.015892) pagemap-cache: filling VMA 7ffd7c78a000-7ffd7c78c000 (8K) [l:7ffd7c600000 h:7ffd7c800000]
+(00.015894) page-pipe: Add iov to page pipe (9 iovs, 9/1085 total)
+(00.015895) Pagemap generated: 2 pages 0 holes
+(00.015896) page-pipe: Page pipe:
+(00.015897) page-pipe: * 1 pipes 10/1085 iovs:
+(00.015898) page-pipe: 	buf 28 pages, 10 iovs:
+(00.015899) page-pipe: 		0x565308419000 1
+(00.015901) page-pipe: 		0x565308634000 4
+(00.015902) page-pipe: 		0x565308639000 1
+(00.015903) page-pipe: 		0x565309eec000 1
+(00.015904) page-pipe: 		0x7f3e64a8d000 7
+(00.015905) page-pipe: 		0x7f3e64a96000 1
+(00.015912) page-pipe: 		0x7f3e64cb0000 3
+(00.015913) page-pipe: 		0x7f3e64cb5000 5
+(00.015914) page-pipe: 		0x7ffd7c6b4000 3
+(00.015915) page-pipe: 		0x7ffd7c78a000 2
+(00.015916) page-pipe: * 0 holes:
+(00.015917) PPB: 28 pages 10 segs 32 pipe 0 off
+(00.015936) Transferring pages:
+(00.015938) 	buf 28/10
+(00.015939) 	p 0x565308419000 [1]
+(00.015950) 	p 0x565308634000 [4]
+(00.015968) 	p 0x565308639000 [1]
+(00.015974) 	p 0x565309eec000 [1]
+(00.015981) 	p 0x7f3e64a8d000 [7]
+(00.016029) 	p 0x7f3e64a96000 [1]
+(00.016051) 	p 0x7f3e64cb0000 [3]
+(00.016061) 	p 0x7f3e64cb5000 [5]
+(00.016076) 	p 0x7ffd7c6b4000 [3]
+(00.016085) 	p 0x7ffd7c78a000 [2]
+(00.016098) page-pipe: Killing page pipe
+(00.016104) ----------------------------------------
+(00.016148) 
+(00.016150) Dumping core (pid: 17619)
+(00.016151) ----------------------------------------
+(00.016152) Obtaining personality ... 
+(00.016300) 17619 has 0 sched policy
+(00.016369) 	dumping 0 nice for 17619
+(00.016376) dumping /proc/17619/loginuid
+(00.016391) dumping /proc/17619/oom_score_adj
+(00.016476) cg: Dumping cgroups for 17619
+(00.016514) cg:  `- New css ID 2
+(00.016516) cg:     `- [blkio] -> [/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e] [0]
+(00.016517) cg:     `- [cpu,cpuacct] -> [/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e] [0]
+(00.016518) cg:     `- [cpuset] -> [/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e] [0]
+(00.016519) cg:     `- [devices] -> [/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e] [0]
+(00.016521) cg:     `- [freezer] -> [/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e] [0]
+(00.016522) cg:     `- [hugetlb] -> [/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e] [0]
+(00.016523) cg:     `- [memory] -> [/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e] [0]
+(00.016524) cg:     `- [name=systemd] -> [/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e] [0]
+(00.016525) cg:     `- [net_cls,net_prio] -> [/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e] [0]
+(00.016526) cg:     `- [perf_event] -> [/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e] [0]
+(00.016527) cg:     `- [pids] -> [/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e] [0]
+(00.029356) cg: adding cgroup /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.029389) cg: Dumping value 500 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/blkio.weight
+(00.029404) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.029499) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.029514) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.029526) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.040339) cg: adding cgroup /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.040429) cg: Dumping value 1024 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpu.shares
+(00.040451) cg: Dumping value 100000 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpu.cfs_period_us
+(00.040471) cg: Dumping value -1 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpu.cfs_quota_us
+(00.040484) cg: Couldn't open /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpu.rt_period_us. This cgroup property may not exist on this kernel
+(00.040491) cg: Couldn't open /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpu.rt_runtime_us. This cgroup property may not exist on this kernel
+(00.040547) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.040567) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.040583) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.040600) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.040612) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.040624) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.040635) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.040646) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.051867) cg: adding cgroup /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.051894) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpuset.cpus
+(00.051907) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpuset.mems
+(00.051923) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpuset.memory_migrate
+(00.051990) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpuset.cpu_exclusive
+(00.052005) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpuset.mem_exclusive
+(00.052018) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpuset.mem_hardwall
+(00.052030) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpuset.memory_spread_page
+(00.052042) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpuset.memory_spread_slab
+(00.052055) cg: Dumping value 1 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpuset.sched_load_balance
+(00.052068) cg: Dumping value -1 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cpuset.sched_relax_domain_level
+(00.052080) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.052093) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.052104) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.052116) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.059106) cg: adding cgroup /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.059140) cg: Dumping value c 1:5 rwm
+c 1:3 rwm
+c 1:9 rwm
+c 1:8 rwm
+c 5:0 rwm
+c 5:1 rwm
+c *:* m
+b *:* m
+c 1:7 rwm
+c 136:* rwm
+c 5:2 rwm
+c 10:200 rwm from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/devices.list
+(00.059155) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.059170) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.059185) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.059256) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.066352) cg: adding cgroup /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.066381) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.066396) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.066408) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.066419) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.072214) cg: adding cgroup /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.072241) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.072255) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.072267) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.072278) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.077112) cg: adding cgroup /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.077140) cg: Dumping value 9223372036854771712 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/memory.limit_in_bytes
+(00.077148) cg: Couldn't open /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/memory.memsw.limit_in_bytes. This cgroup property may not exist on this kernel
+(00.077160) cg: Dumping value 60 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/memory.swappiness
+(00.077174) cg: Dumping value 9223372036854771712 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/memory.soft_limit_in_bytes
+(00.077186) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/memory.move_charge_at_immigrate
+(00.077232) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/memory.oom_control
+(00.077249) cg: Dumping value 1 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/memory.use_hierarchy
+(00.077262) cg: Dumping value 9223372036854771712 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/memory.kmem.limit_in_bytes
+(00.077275) cg: Dumping value 9223372036854771712 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/memory.kmem.tcp.limit_in_bytes
+(00.077288) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.077300) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.077312) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.077324) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.083782) cg: adding cgroup /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.083811) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.083870) cg: Dumping value 1 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.083892) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.083904) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.088525) cg: adding cgroup /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.088551) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/net_cls.classid
+(00.088565) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.088577) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.088588) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.088600) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.088614) cg: Dumping value lo 0
+ens33 0
+docker0 0
+veth5a22d68 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/net_prio.ifpriomap
+(00.088625) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.088635) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.088645) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.088654) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.094649) cg: adding cgroup /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.094673) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.094685) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.094696) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.094708) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.098739) cg: adding cgroup /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.098759) cg: Dumping value max from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/pids.max
+(00.098772) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.clone_children
+(00.098784) cg: Dumping value 0 from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/notify_on_release
+(00.098795) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/cgroup.procs
+(00.098806) cg: Dumping value  from /proc/self/fd/11/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/tasks
+(00.098833) cg: Set 2 is root one
+(00.098874) ----------------------------------------
+(00.100022) 
+(00.100028) Dumping mm (pid: 17619)
+(00.100029) ----------------------------------------
+(00.100032) 0x565308419000-0x565308435000 (112K) prot 0x5 flags 0x2 fdflags 0 st 0x41 off 0 reg fp  shmid: 0x1
+(00.100034) 0x565308634000-0x565308637000 (12K) prot 0x1 flags 0x2 fdflags 0 st 0x41 off 0x1b000 reg fp  shmid: 0x1
+(00.100036) 0x565308637000-0x565308638000 (4K) prot 0x3 flags 0x2 fdflags 0 st 0x41 off 0x1e000 reg fp  shmid: 0x1
+(00.100037) 0x565308638000-0x56530863a000 (8K) prot 0x3 flags 0x22 fdflags 0 st 0x201 off 0 reg ap  shmid: 0
+(00.100039) 0x565309eec000-0x565309f0d000 (132K) prot 0x3 flags 0x22 fdflags 0 st 0x221 off 0 reg heap ap  shmid: 0
+(00.100046) 0x7f3e646ec000-0x7f3e6488d000 (1668K) prot 0x5 flags 0x2 fdflags 0 st 0x41 off 0 reg fp  shmid: 0x2
+(00.100047) 0x7f3e6488d000-0x7f3e64a8d000 (2048K) prot 0 flags 0x2 fdflags 0 st 0x41 off 0x1a1000 reg fp  shmid: 0x2
+(00.100048) 0x7f3e64a8d000-0x7f3e64a91000 (16K) prot 0x1 flags 0x2 fdflags 0 st 0x41 off 0x1a1000 reg fp  shmid: 0x2
+(00.100050) 0x7f3e64a91000-0x7f3e64a93000 (8K) prot 0x3 flags 0x2 fdflags 0 st 0x41 off 0x1a5000 reg fp  shmid: 0x2
+(00.100051) 0x7f3e64a93000-0x7f3e64a97000 (16K) prot 0x3 flags 0x22 fdflags 0 st 0x201 off 0 reg ap  shmid: 0
+(00.100052) 0x7f3e64a97000-0x7f3e64ab8000 (132K) prot 0x5 flags 0x2 fdflags 0 st 0x41 off 0 reg fp  shmid: 0x3
+(00.100054) 0x7f3e64cb0000-0x7f3e64cb3000 (12K) prot 0x3 flags 0x22 fdflags 0 st 0x201 off 0 reg ap  shmid: 0
+(00.100055) 0x7f3e64cb5000-0x7f3e64cb7000 (8K) prot 0x3 flags 0x22 fdflags 0 st 0x201 off 0 reg ap  shmid: 0
+(00.100056) 0x7f3e64cb7000-0x7f3e64cb8000 (4K) prot 0x1 flags 0x2 fdflags 0 st 0x41 off 0x20000 reg fp  shmid: 0x3
+(00.100058) 0x7f3e64cb8000-0x7f3e64cb9000 (4K) prot 0x3 flags 0x2 fdflags 0 st 0x41 off 0x21000 reg fp  shmid: 0x3
+(00.100059) 0x7f3e64cb9000-0x7f3e64cba000 (4K) prot 0x3 flags 0x22 fdflags 0 st 0x201 off 0 reg ap  shmid: 0
+(00.100061) 0x7ffd7c695000-0x7ffd7c6b7000 (136K) prot 0x3 flags 0x122 fdflags 0 st 0x201 off 0 reg ap  shmid: 0
+(00.100062) 0x7ffd7c788000-0x7ffd7c78a000 (8K) prot 0x1 flags 0x22 fdflags 0 st 0x1201 off 0 reg vvar ap  shmid: 0
+(00.100063) 0x7ffd7c78a000-0x7ffd7c78c000 (8K) prot 0x5 flags 0x22 fdflags 0 st 0x209 off 0 reg vdso ap  shmid: 0
+(00.100064) 0xffffffffff600000-0xffffffffff601000 (4K) prot 0x5 flags 0x22 fdflags 0 st 0x204 off 0 vsys ap  shmid: 0
+(00.100066) Obtaining task auvx ...
+(00.100133) Dumping path for -3 fd via self 12 [/]
+(00.100149) Dumping task cwd id 0x7 root id 0x7
+(00.100179) mnt: Dumping mountpoints
+(00.100181) mnt: 	113: 34:/ @ ./sys/firmware
+(00.100189) mnt: Path `/sys/firmware' resolved to `./sys/firmware' mountpoint
+(00.102391) mnt: 	112: 30:/null @ ./proc/sched_debug
+(00.102397) mnt: Something is mounted on top of ./dev
+(00.102532) mnt: Path `/dev' resolved to `./dev' mountpoint
+(00.104322) mnt: 	111: 30:/null @ ./proc/timer_stats
+(00.104328) mnt: 	110: 30:/null @ ./proc/timer_list
+(00.104330) mnt: 	109: 30:/null @ ./proc/kcore
+(00.104332) mnt: 	108: 2f:/sysrq-trigger @ ./proc/sysrq-trigger
+(00.104334) mnt: 	107: 2f:/sys @ ./proc/sys
+(00.104336) mnt: 	106: 2f:/irq @ ./proc/irq
+(00.104337) mnt: 	105: 2f:/fs @ ./proc/fs
+(00.104339) mnt: 	104: 2f:/bus @ ./proc/bus
+(00.104340) mnt: 	102: 2f:/asound @ ./proc/asound
+(00.104341) mnt: 	230: 800001:/var/lib/docker/volumes/6c5a555b65dc5d2fd3c813d24d80b96e2031978057b2a348ceb47ee81141d713/_data @ ./var/lib/mysql
+(00.104344) mnt: 	229: 2d:/ @ ./dev/shm
+(00.104345) mnt: 	228: 800001:/var/lib/docker/containers/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/hosts @ ./etc/hosts
+(00.104347) mnt: 	227: 800001:/var/lib/docker/containers/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/hostname @ ./etc/hostname
+(00.104349) mnt: 	226: 800001:/var/lib/docker/containers/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e/resolv.conf @ ./etc/resolv.conf
+(00.104351) mnt: 	225: 2e:/ @ ./dev/mqueue
+(00.104360) mnt: Path `/dev/mqueue' resolved to `./dev/mqueue' mountpoint
+(00.104370) mnt: 	224: 24:/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/memory
+(00.104372) mnt: 	223: 23:/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/hugetlb
+(00.104374) mnt: 	222: 22:/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/freezer
+(00.104376) mnt: 	221: 21:/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/perf_event
+(00.104377) mnt: 	220: 20:/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/cpu,cpuacct
+(00.104379) mnt: 	219: 1f:/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/pids
+(00.104384) mnt: 	218: 1e:/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/net_cls,net_prio
+(00.104386) mnt: 	217: 1d:/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/devices
+(00.104388) mnt: 	216: 1c:/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/cpuset
+(00.104390) mnt: 	215: 1b:/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/blkio
+(00.104391) mnt: 	214: 19:/docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e @ ./sys/fs/cgroup/systemd
+(00.104393) mnt: 	211: 33:/ @ ./sys/fs/cgroup
+(00.104394) mnt: Something is mounted on top of ./sys/fs/cgroup
+(00.104486) mnt: Path `/sys/fs/cgroup' resolved to `./sys/fs/cgroup' mountpoint
+(00.106447) mnt: 	189: 32:/ @ ./sys
+(00.106454) mnt: 	179: 31:/ @ ./dev/pts
+(00.106456) mnt: 	178: 30:/ @ ./dev
+(00.106457) mnt: Something is mounted on top of ./dev
+(00.106548) mnt: Path `/dev' resolved to `./dev' mountpoint
+(00.108512) mnt: 	177: 2f:/ @ ./proc
+(00.108520) mnt: 	176: 2a:/ @ ./
+(00.108530) Dumping file-locks
+(00.108536) 
+(00.108537) Dumping pstree (pid: 17619)
+(00.108538) ----------------------------------------
+(00.108540) Process: 1(17619)
+(00.108553) ----------------------------------------
+(00.108558) Dumping 1(17619)'s namespaces
+(00.110000) Dump NET namespace info 9 via 17619
+(00.110247) Mount ns' sysfs in crtools-sys.VXmBwG
+(00.110295) Dumping netns links
+(00.110417) Dumping netns links
+(00.110815) Dump IPC namespace 10 via 17619
+(00.110964) IPC shared memory segments: 0
+(00.110972) IPC message queues: 0
+(00.110975) IPC semaphore sets: 0
+(00.111136) Dump UTS namespace 11 via 17619
+(00.111340) Namespaces dump complete
+(00.111356) cg: Dumping 1 sets
+(00.111360) cg:    `- Dumping blkio of /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.111362) cg:    `- Dumping cpu,cpuacct of /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.111363) cg:    `- Dumping cpuset of /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.111364) cg:    `- Dumping devices of /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.111365) cg:    `- Dumping freezer of /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.111367) cg:    `- Dumping hugetlb of /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.111368) cg:    `- Dumping memory of /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.111369) cg:    `- Dumping name=systemd of /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.111370) cg:    `- Dumping net_cls,net_prio of /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.111371) cg:    `- Dumping perf_event of /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.111372) cg:    `- Dumping pids of /docker/e41e4aa7a42c363ae019af5ad519d20d1d302380c9e72c02f6cb06b3d562637e
+(00.111390) cg: Writing CG image
+(00.111431) sk unix: Dumping external sockets
+(00.111434) Writing image inventory (version 1)
+(00.111490) Running post-dump scripts
+(00.111494) 	RPC
+(00.111584) Unfreezing tasks into 2
+(00.112142) Writing stats
+(00.112165) Dumping finished successfully
