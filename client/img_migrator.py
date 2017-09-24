@@ -8,7 +8,7 @@ import time
 import tool.util
 import tool.criu_api
 
-def_path = "/val/local/docker_migrator_ck"
+def_path = "/var/local/docker_migrator_ck"
 
 class opendir(object):
 	def __init__(self, path):
