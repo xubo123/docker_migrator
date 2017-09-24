@@ -31,7 +31,7 @@ class docker_lm_worker(object):
         self.load_ct_config(docker_dir)
 
     def init_dst(self):
-		pass    
+        pass     
     def get_full_ctid(self):
         container_dirlist = os.listdir(os.path.join(docker_dir,"containers"))
         full_id = ""
@@ -174,11 +174,12 @@ class docker_lm_worker(object):
 
     def put_meta_images(self, dir,ctid,ck_dir):
         # Create docker runtime meta dir on dst side
-	dir = os.path.join(dir,ck_dir)
-	with open(os.path.join(dir, "state.json")) as data_file:
-		data = json.load(data_file)
-	self.full_ctid = data["id"]
-
+        logging.info("ctid=====%s",self._ct_id)
+        self.full_ctid = self.get_full_ctid()
+        self._mnt_id = self.get_mount_id()
+        self.diff_ids = self.get_diff_id()
+        self._mnt_diff_ids = self.get_mnt_diff_ids()
+        self._volumes_names = self.get_volumes_name()
 	self.load_ct_config(docker_dir)    
 
     def final_dump(self,pid,img,criu_connection,fs):
