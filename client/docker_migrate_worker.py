@@ -69,9 +69,14 @@ class docker_lm_worker(object):
               self._mnt_diff_dirs.append(mnt_diff_dir)
         #/var/lib/docker/volumes
         self._ct_volumes_dirs = []
-        for volumes_name in self._volumes_names :
-              volumes_dir = os.path.join(docker_dir,"volumes",volumes_name)
-              self._ct_volumes_dirs.append(volumes_dir)
+        if self._volumes_names!=None : 
+            if  self._volumes_names[0] == 1:
+                for volumes_name in self._volumes_names[1:] :
+                    volumes_dir = os.path.join(docker_dir,"volumes",volumes_name)
+                    self._ct_volumes_dirs.append(volumes_dir)
+            elif self._volumes_names[0] == 2 :
+               for volumes_name in self._volumes_names[1:] :
+                    self._ct_volumes_dirs.append(volumes_name)
         logging.info("Container rootfs: %s", self._ct_rootfs)
         logging.info("Container mounts_dir: %s", self._ct_layerdb_dir)
         logging.info("Container diff : %s",self._ct_diff_dirs)
@@ -134,7 +139,8 @@ class docker_lm_worker(object):
     def get_volumes_name(self):
         config_path = os.path.join(docker_dir,"containers",self.full_ctid,"config.v2.json")
         config_file = open(config_path)
-        volumes_names = []
+        volumes_names = [0]
+        external_volumes = [0]
         try:
             config_json_str = config_file.read()
             config_json = json.loads(config_json_str)
@@ -142,11 +148,23 @@ class docker_lm_worker(object):
             logging.info("mount_point:%s",mount_point)
             for key,value in mount_point.items():
                 logging.info("key,value:%s,%s",key,value)
-                volumes_names.append(value["Name"])
-                logging.info("volumes_name:%s",value["Name"])
+                if value["Name"]!="":
+                   volumes_names[0] = 1
+                   volumes_names.append(value["Name"])
+                   logging.info("default volumes_name:%s",value["Name"])
+                   break
+                elif value["Source"]!="":
+                   external_volumes[0] = 2
+                   external_volumes.append(value["Source"])
+                   logging.info("external volumes_name:%s",value["Source"])
         finally:
             config_file.close()
-        return volumes_names
+        if volumes_names[0]:
+           return volumes_names
+        elif external_volumes[0]:
+           return external_volumes
+        else:
+           return None
     
 
     def get_mnt_diff_ids(self):
