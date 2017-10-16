@@ -30,7 +30,7 @@ class docker_lm_worker(object):
         self._volumes_names = self.get_volumes_name()
         self.load_fs_dir()
         self.load_ct_config(docker_dir)
-
+        self.image_id = self.get_image_id()
     def init_dst(self):
         pass     
     def get_full_ctid(self):
@@ -55,6 +55,8 @@ class docker_lm_worker(object):
         #/var/lib/docker/aufs/mnt/mnt_id
         self._ct_rootfs = os.path.join(
                         docker_dir, "aufs/mnt", self._mnt_id)
+        self._ct_init_rootfs = os.path.join(
+                        docker_dir, "aufs/mnt", self._mnt_id+"-init")
         #layers relationship /var/lib/docker/image/aufs/layerdb/mounts
         self._ct_layerdb_dir = os.path.join(docker_dir,"image/aufs/layerdb/mounts",self.full_ctid)
         #layers relationship /var/lib/docker/image/aufs/layerdb/sha256
@@ -62,11 +64,19 @@ class docker_lm_worker(object):
         for diff_id in self.diff_ids :
              _ct_diff_dir = os.path.join(docker_dir,"image/aufs/layerdb/sha256",diff_id)
              self._ct_diff_dirs.append(_ct_diff_dir)
+        #/var/lib/docker/image/aufs/imagedb/content/sha256(/metadata/sha256)
+        self._ct_image_dir = os.path.join(docker_dir,"image/aufs/imagedb/content/sha256",self.image_id)
+        self._ct_imagemeta_dir = os.path.join(docker_dir,"image/aufs/imagedb/metadata/sha256",self.image_id)
         #/var/lib/docker/aufs/diff
         self._mnt_diff_dirs = []
         for mnt_diff_id in self._mnt_diff_ids:
               mnt_diff_dir = os.path.join(docker_dir,"aufs/diff",mnt_diff_id)
               self._mnt_diff_dirs.append(mnt_diff_dir)
+        #/var/lib/docker/aufs/layers
+        self._ct_layers_dirs = [os.path.join(docker_dir,"aufs/layers",self._mnt_id+"-init")]
+        for mnt_layers_id in self._mnt_diff_ids:
+              mnt_layers_dir = os.path.join(docker_dir,"aufs/layers",mnt_layers_id)
+              self._ct_layers_dirs.append(mnt_layers_dir)
         #/var/lib/docker/volumes
         self._ct_volumes_dirs = []
         if self._volumes_names!=None : 
@@ -79,6 +89,7 @@ class docker_lm_worker(object):
                     self._ct_volumes_dirs.append(volumes_name)
         logging.info("Container rootfs: %s", self._ct_rootfs)
         logging.info("Container mounts_dir: %s", self._ct_layerdb_dir)
+        logging.info("Container layers : %s",self._ct_layers_dirs)
         logging.info("Container diff : %s",self._ct_diff_dirs)
         logging.info("Container volumes : %s",self._ct_volumes_dirs)
 
@@ -97,10 +108,13 @@ class docker_lm_worker(object):
 
     def get_fs(self, fdfs=None):
         # use rsync for rootfs and configuration directories
-        lm_fs_dir = [self._ct_rootfs, self._ct_config_dir,self._ct_layerdb_dir]
+        lm_fs_dir = [self._ct_rootfs,self._ct_init_rootfs,self._ct_config_dir,self._ct_layerdb_dir,self._ct_image_dir]
+        lm_fs_dir.extend(self._ct_layers_dirs)
         lm_fs_dir.extend(self._ct_diff_dirs)
         lm_fs_dir.extend(self._ct_volumes_dirs)
         lm_fs_dir.extend(self._mnt_diff_dirs)
+        if os.path.exists(self._ct_imageMeta_dir):
+           lm_fs_dir.extend(self._ct_imageMeta_dir)
         return client.fs_migrator.lm_docker_fs(lm_fs_dir)
 
     def get_mount_id(self):
@@ -165,6 +179,18 @@ class docker_lm_worker(object):
            return external_volumes
         else:
            return None
+    
+    def get_image_id(self):
+        config_path = os.path.join(docker_dir,"containers",self.full_ctid,"config.v2.json")
+        config_file = open(config_path)
+        image_id = ""
+        try:
+            config_json_str = config_file.read()
+            config_json = json.loads(config_json_str)
+            image_id = config_json["Image"]
+        finally:
+            config_file.close()
+        return image_id
     
 
     def get_mnt_diff_ids(self):
