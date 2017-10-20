@@ -67,6 +67,7 @@ class lm_docker_img(object):
         self._keep_on_close = False
         self._work_dir = None
         self._current_dir = None
+        self._criu_work_dir = None
         self._type = typ
     
     def set_options(self, opts):
@@ -133,7 +134,7 @@ class lm_docker_img(object):
 		pass
 
     def criu_work_dir(self):
-			  return self._criu_work_dir.name()
+	        return self._criu_work_dir.name()
     def work_dir(self):
         return self._work_dir.name()
     
@@ -171,7 +172,8 @@ class lm_docker_img(object):
 		else:
 			dirname = self.image_dir()
                         dirname = os.path.join(dirname,migrate_worker.get_ck_dir())
-		self.__acc_tar = untar_thread(sk, dirname)
+		        self._criu_work_dir = opendir(dirname+"/criu.work")
+                self.__acc_tar = untar_thread(sk, dirname)
 		self.__acc_tar.start()
 		logging.info("Started images server")
 
