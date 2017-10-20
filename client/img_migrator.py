@@ -98,13 +98,13 @@ class lm_docker_img(object):
 			tf.add(img)
 
 		logging.info("\tAdd migrate_worker images")
-		self._criu_work_dir = opendir(ck_dir+"/criu.work")
+		self._criu_work_dir = ck_dir+"/criu.work"
 		for himg in migrate_worker.get_meta_images(ck_dir):
 			tf.add(himg[1], himg[0])
                 target_imagepath =dest_rpc_caller.get_image_dir()
                 dst = "%s:%s" % (thost,os.path.join(target_imagepath,migrate_worker.get_ck_dir()))
 
-                sp.call(["rsync","-a",self._criu_work_dir.name(),dst])
+                sp.call(["rsync","-a",self._criu_work_dir,dst])
                 logging.info("Command: rsync -a %s %s",self._criu_work_dir.name(),dst)
 		tf.close()
 		dest_rpc_caller.stop_accept_images()
@@ -134,7 +134,7 @@ class lm_docker_img(object):
 		pass
 
     def criu_work_dir(self):
-	        return self._criu_work_dir.name()
+	        return self._criu_work_dir
     def work_dir(self):
         return self._work_dir.name()
     
@@ -172,7 +172,7 @@ class lm_docker_img(object):
 		else:
 			dirname = self.image_dir()
                         dirname = os.path.join(dirname,migrate_worker.get_ck_dir())
-		        self._criu_work_dir = opendir(dirname+"/criu.work")
+		        self._criu_work_dir =dirname+"/criu.work"
                 self.__acc_tar = untar_thread(sk, dirname)
 		self.__acc_tar.start()
 		logging.info("Started images server")
