@@ -104,7 +104,7 @@ def get_criu_version():
 
 
 def criu_get_stats(img, file_name):
-	with open(os.path.join(img.work_dir(), file_name)) as f:
+	with open(os.path.join(img.criu_work_dir(), file_name)) as f:
 		stats_dict = pycriu.images.load(f)
 		stats = pycriu.images.stats_pb2.stats_entry()
 		pycriu.images.pb2dict.dict2pb(stats_dict['entries'][0], stats)

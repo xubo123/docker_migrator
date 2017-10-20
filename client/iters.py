@@ -52,19 +52,25 @@ class migration_iter_controller(object):
         root_pid = self._migrate_worker.root_task_pid()
         migration_stats = client.mstats.live_stats()
 	migration_stats.handle_start()
-
+        
+        iter_count = 0
         # Step1 : FS migration
         logging.info("FS migration start!")
         fsstats = self.fs.start_migration()
 	migration_stats.handle_preliminary(fsstats)
         
         #Step2 : pre-dump TODO
-
+        logging.info("Pre-Dump Docker Container!")
+        self.dest_rpc_caller.start_iter(False)
+        self.img.new_image_dir()
+        self._migrate_worker.pre_dump(root_pid,self.img,self.fs)
+        iter_count +=1
+        self.dest_rpc_caller.end_iter()
         #Step3 : Stop and Copy ,Final dump and restore!
         logging.info("Final dump and restore! ")
         self.dest_rpc_caller.start_iter(False)
         self.img.new_image_dir()
-        self._migrate_worker.final_dump(root_pid,self.img,self.criu_connection,self.fs)
+        self._migrate_worker.final_dump(root_pid,self.img,self.fs)
         self.dest_rpc_caller.end_iter()
         
         #Step4 :Restore and CLean!
@@ -84,16 +90,11 @@ class migration_iter_controller(object):
 
 		# Restored on target, can't fail starting from this point
 	try:
-			# Ack previous dump request to terminate all frozen tasks
-		resp = self.criu_connection.ack_notify()
-		if not resp.success:
-		    logging.warning("Bad notification from target host")
 
-		dstats = criu_api.criu_get_dstats(self.img)
+		dstats = tool.criu_api.criu_get_dstats(self.img)
 		migration_stats.handle_iteration(dstats, fsstats)
-
 		logging.info("Migration succeeded")
-		self._migrate_worker.migration_complete(self.fs, self.target_host)
+		self._migrate_worker.migration_complete(self.fs, self.dest_rpc_caller)
 		migration_stats.handle_stop(self)
 		self.img.close()
 		self.criu_connection.close()

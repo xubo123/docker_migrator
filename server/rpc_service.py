@@ -83,7 +83,9 @@ class rpc_migrate_service(object):
 
     def rpc_end_iter(self):
         pass
-    
+    def rpc_restore_time(self):
+		stats = tool.criu_api.criu_get_rstats(self.img)
+		return stats.restore_time
     def rpc_restore_from_images(self,ctid,ck_dir):
 	logging.info("Restoring from images")
 	self._migrate_worker.put_meta_images(self.img.image_dir(),ctid,ck_dir)

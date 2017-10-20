@@ -28,7 +28,7 @@ class live_stats(object):
 
 	def handle_stop(self, iters):
 		self.__end_time = time.time()
-		self.__restore_time = iters.get_target_host().restore_time()
+		self.__restore_time = iters.dest_rpc_caller.restore_time()
 		self.__img_sync_time = iters.img.img_sync_time()
 		self.__print_overall()
 

@@ -225,12 +225,31 @@ class docker_lm_worker(object):
         self.full_ctid = self.get_full_ctid()
       	self.load_ct_config(docker_dir)    
 
-    def final_dump(self,pid,img,criu_connection,fs):
+
+    def pre_dump(self,pid,img,fs):
+        logging.info("Pre-Dump container %s",pid)
+
+        log_fd = open("/tmp/docker_pre_checkpoint.log","w+")
+        image_path_opt = "--checkpoint-dir="+ img.image_dir()
+        ret = sp.call([docker_bin, "checkpoint","create","--pre-dump", image_path_opt, self._ct_id,self.get_ck_dir()],
+                                        stdout=log_fd, stderr=log_fd)
+        if ret != 0:
+                        raise Exception("docker pre_checkpoint failed") 
+
+    def final_dump(self,pid,img,fs):
         logging.info("Last dump container %s",pid)
 
         log_fd = open("/tmp/docker_checkpoint.log","w+")
         image_path_opt = "--checkpoint-dir="+ img.image_dir()
-        ret = sp.call([docker_bin, "checkpoint","create", image_path_opt, self._ct_id,self.get_ck_dir()],
+        ret = 1
+        if img.current_iter <= 1:
+           logging.info("No parentpath dump:%d",img.current_iter)
+           ret = sp.call([docker_bin, "checkpoint","create", image_path_opt, self._ct_id,self.get_ck_dir()],
+                                        stdout=log_fd, stderr=log_fd)
+        else :
+           logging.info("Dump with Parentpath")
+           parent_path = "--parent-path="+img.parent_image_dir() 
+           ret = sp.call([docker_bin, "checkpoint","create", image_path_opt, parent_path, self._ct_id,self.get_ck_dir()],
                                         stdout=log_fd, stderr=log_fd)
         if ret != 0:
 			raise Exception("docker checkpoint failed")

@@ -97,14 +97,14 @@ class lm_docker_img(object):
 			tf.add(img)
 
 		logging.info("\tAdd migrate_worker images")
+		self._criu_work_dir = opendir(ck_dir+"/criu.work")
 		for himg in migrate_worker.get_meta_images(ck_dir):
 			tf.add(himg[1], himg[0])
-                criu_work_dir = ck_dir+"/criu.work"
                 target_imagepath =dest_rpc_caller.get_image_dir()
                 dst = "%s:%s" % (thost,os.path.join(target_imagepath,migrate_worker.get_ck_dir()))
 
-                sp.call(["rsync","-a",criu_work_dir,dst])
-                logging.info("Command: rsync -a %s %s",criu_work_dir,dst)
+                sp.call(["rsync","-a",self._criu_work_dir.name(),dst])
+                logging.info("Command: rsync -a %s %s",self._criu_work_dir.name(),dst)
 		tf.close()
 		dest_rpc_caller.stop_accept_images()
 
@@ -132,6 +132,8 @@ class lm_docker_img(object):
 			logging.info("Images are kept in %s", self._work_dir.name())
 		pass
 
+    def criu_work_dir(self):
+			  return self._criu_work_dir.name()
     def work_dir(self):
         return self._work_dir.name()
     
@@ -140,6 +142,12 @@ class lm_docker_img(object):
     
     def image_dir_fd(self):
 		return self._current_dir.fileno()
+
+    def parent_image_dir(self):
+		img_dir = "%s/%d" % (self._img_path, self.current_iter-1)
+		logging.info("\tParent directory %s", img_dir)
+		parent_dir = opendir(img_dir)
+		return parent_dir.name()
 
     def new_image_dir(self):
 		if self._current_dir:
@@ -170,3 +178,6 @@ class lm_docker_img(object):
     def stop_accept_images(self):
 		logging.info("Waiting for images to unpack")
 		self.__acc_tar.join()
+
+		def img_sync_time(self):
+		    return self.sync_time
