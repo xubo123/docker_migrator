@@ -99,7 +99,7 @@ class migration_iter_controller(object):
             self._migrate_worker.migration_complete(self.fs, self.dest_rpc_caller)
             migration_stats.handle_stop(self)
             self.img.close()
-            self.criu_connection.close()
+        #   self.criu_connection.close()
 
         except Exception as e:
             logging.warning("Exception during final cleanup: %s", e)
