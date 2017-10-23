@@ -120,8 +120,9 @@ def criu_get_rstats(img):
 	dirlist = os.listdir(img.criu_work_dir())
 	rstdir = ""
 	for dirtmp in dirlist:
-		if dirtmp.find("restore-"):
+		if dirtmp.find("restore-") >= 0:
 			rstdir = dirtmp
 			logging.info("restore work dirpath:%s", dirtmp)
+			break
 	stats = criu_get_stats(img, rstdir)
 	return stats.restore
