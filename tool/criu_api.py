@@ -124,5 +124,5 @@ def criu_get_rstats(img):
 			rstdir = dirtmp
 			logging.info("restore work dirpath:%s", dirtmp)
 			break
-	stats = criu_get_stats(img, rstdir)
+	stats = criu_get_stats(img, rstdir+"/stats-restore")
 	return stats.restore
