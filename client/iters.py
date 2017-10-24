@@ -10,6 +10,8 @@ import client.mstats
 MIGRATION_MODE_LIVE = "live"
 MIGRATION_MODE_RESTART = "restart"
 MIGRATION_MODES = (MIGRATION_MODE_LIVE, MIGRATION_MODE_RESTART)
+PRE_DUMP_ENABLE = True
+PRE_DUMP_AUTO_DETECT = None
 
 def is_live_mode(mode):
     """Check is migration running in live mode"""
@@ -36,6 +38,7 @@ class migration_iter_controller(object):
         self.__force = opts["force"]
         self.__skip_cpu_check = opts["skip_cpu_check"]
         self.__skip_criu_check = opts["skip_criu_check"]
+        self.__pre_dump = opts["pre_dump"]
         self._migrate_worker.set_options(opts)
         self._thost = opts["to"]
         self.fs.set_options(opts)
@@ -51,6 +54,7 @@ class migration_iter_controller(object):
         self.__validate_criu_version
         root_pid = self._migrate_worker.root_task_pid()
         migration_stats = client.mstats.live_stats()
+        use_pre_dumps = self.__check_use_pre_dumps()
         migration_stats.handle_start()
 
         iter_count = 0
@@ -60,27 +64,32 @@ class migration_iter_controller(object):
         migration_stats.handle_preliminary(fsstats)
 
         #Step2 : pre-dump TODO
-        logging.info("Pre-Dump Docker Container!")
-        self.dest_rpc_caller.start_iter(False)
-        self.img.new_image_dir()
-        self._migrate_worker.pre_dump(root_pid, self.img, self.fs)
-        iter_count += 1
-        self.dest_rpc_caller.end_iter()
+        while use_pre_dumps:
+            logging.info("Pre-Dump Docker Container!itersCount:%d",iter_count)
+            self.dest_rpc_caller.start_iter(False)
+            self.img.new_image_dir()
+            self._migrate_worker.pre_dump(root_pid, self.img, self.fs)
+            self.img.sync_imgs_to_target(self.dest_rpc_caller,
+			                                      self._migrate_worker, self.connection.fdmem, self._thost,True)
+            logging.info("checkpoint image migration time:%s",self.img.sync_time)
+            iter_count += 1
+            if iter_count >5:
+                break
+            self.dest_rpc_caller.end_iter()
         #Step3 : Stop and Copy ,Final dump and restore!
-        logging.info("Final dump and restore! ")
+        logging.info("Final dump! ")
         self.dest_rpc_caller.start_iter(False)
         self.img.new_image_dir()
+        self.fs.last_mnt_sync(self._migrate_worker)
         self._migrate_worker.final_dump(root_pid, self.img, self.fs)
         self.dest_rpc_caller.end_iter()
-
         #Step4 :Restore and CLean!
         try:
 			# Handle final FS and images sync on frozen htype
             logging.info("Final FS and images sync")
-            fsstats = self.fs.stop_migration()
+            fsstats = self.fs.stop_migration(self._migrate_worker)
             self.img.sync_imgs_to_target(self.dest_rpc_caller,
-			                                      self._migrate_worker, self.connection.fdmem, self._thost)
-
+            		                           self._migrate_worker, self.connection.fdmem, self._thost, False)
 			# Restore htype on target
             logging.info("Asking target host to restore")
             self.dest_rpc_caller.restore_from_images(self._migrate_worker._ct_id,
@@ -98,12 +107,44 @@ class migration_iter_controller(object):
             logging.info("Migration succeeded")
             self._migrate_worker.migration_complete(self.fs, self.dest_rpc_caller)
             migration_stats.handle_stop(self)
+            self.criu_connection.close()
             self.img.close()
-        #   self.criu_connection.close()
 
         except Exception as e:
             logging.warning("Exception during final cleanup: %s", e)
 
+
+    def __check_support_mem_track(self):
+        req = criu_req.make_dirty_tracking_req(self.img)
+        resp = self.criu_connection.send_req(req)
+        if not resp.success:
+            raise Exception()
+        if not resp.HasField('features'):
+            return False
+        if not resp.features.HasField('mem_track'):
+            return False
+        return resp.features.mem_track
+
+    def __check_use_pre_dumps(self):
+        logging.info("Checking for Dirty Tracking")
+        use_pre_dumps = False
+        if self.__pre_dump == PRE_DUMP_AUTO_DETECT:
+            try:
+                # Detect is memory tracking supported
+                use_pre_dumps = (self.__check_support_mem_track() and
+                                 self.htype.can_pre_dump())
+                logging.info("\t`- Auto %s",
+                             (use_pre_dumps and "enabled" or "disabled"))
+            except Exception:
+            # Memory tracking auto detection not supported
+                use_pre_dumps = False
+                logging.info("\t`- Auto detection not possible - Disabled")
+        else:
+            use_pre_dumps = self.__pre_dump
+            logging.info("\t`- Explicitly %s",
+                         (use_pre_dumps and "enabled" or "disabled"))
+        self.criu_connection.memory_tracking(use_pre_dumps)
+        return use_pre_dumps
 
     def __validate_cpu(self):
         if self.__skip_cpu_check or self.__force:

@@ -29,7 +29,7 @@ class live_stats(object):
     def handle_stop(self, iters):
         self.__end_time = time.time()
         self.__restore_time = iters.dest_rpc_caller.restore_time()
-        self.__img_sync_time = iters.img.img_sync_time()
+        self.__img_sync_time_list = iters.img.img_sync_time_list()
         self.__print_overall()
 
     def __print_overall(self):
@@ -47,7 +47,8 @@ class live_stats(object):
         logging.info("\t  frozen time is ~%.2lf sec (%s)", frozen_time,
                      str(frozen_times))
         logging.info("\t restore time is ~%.2lf sec", restore_time)
-        logging.info("\timg sync time is ~%.2lf sec", self.__img_sync_time)
+        for iter_count, s_time in enumerate(self.__img_sync_time_list):
+            logging.info("\t iterCount:%d , img sync time is ~%.2lf sec", iter_count, s_time)
 
     def __usec2sec(self, usec):
         return usec / 1000000.

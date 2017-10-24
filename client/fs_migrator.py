@@ -6,51 +6,93 @@ rsync_log_file = "rsync.log"
 
 
 class lm_docker_fs(object):
-	def __init__(self, subtree_paths):
-		self.__roots = []
-		for path in subtree_paths:
-			logging.info("Initialized subtree FS hauler (%s)", path)
-			self.__roots.append(path)
+    def __init__(self, subtree_paths):
+        self.__roots = []
+        for path in subtree_paths:
+            logging.info("Initialized subtree FS hauler (%s)", path)
+            self.__roots.append(path)
 
-		self.__thost = None
+        self.__thost = None
 
-	def set_options(self, opts):
-		self.__thost = opts["to"]
+    def set_options(self, opts):
+        self.__thost = opts["to"]
 
-	def set_work_dir(self, wdir):
-		self.__wdir = wdir
+    def set_work_dir(self, wdir):
+        self.__wdir = wdir
 
-	def __run_rsync(self):
-		logf = open(os.path.join(self.__wdir, rsync_log_file), "w+")
+    def __run_rsync(self):
+        logf = open(os.path.join(self.__wdir, rsync_log_file), "w+")
 
-		for dir_name in self.__roots:
+        for dir_name in self.__roots:
 
-			dst = "%s:%s" % (self.__thost, os.path.dirname(dir_name))
+            dst = "%s:%s" % (self.__thost, os.path.dirname(dir_name))
 
 			# First rsync might be very long. Wait for it not
 			# to produce big pause between the 1st pre-dump and
 			# .stop_migration
 
-			ret = sp.call(
-				["rsync", "-a", dir_name, dst],
-				stdout=logf, stderr=logf)
-                        logging.info("rsync -a "+dir_name+" "+dst)
-			if ret != 0:
-				raise Exception("Rsync failed")
+            ret = sp.call(
+                ["rsync", "-a", dir_name, dst],
+                stdout=logf, stderr=logf)
+            logging.info("rsync -a "+dir_name+" "+dst+" result ret :%d",ret)
+            if ret != 0 and ret != 24:
+                raise Exception("Rsync failed")
+    def __run_mnt_rsync(self,worker):
+        logf = open(os.path.join(self.__wdir, rsync_log_file), "w+")
+        dir_name = worker._ct_rootfs
+        rsync_flag = True
+        while rsync_flag:
 
-	def start_migration(self):
-		logging.info("Starting FS migration")
-		self.__run_rsync()
-		return None
+            dst = "%s:%s" % (self.__thost, os.path.dirname(dir_name))
 
-	def next_iteration(self):
-		return None
+			# First rsync might be very long. Wait for it not
+			# to produce big pause between the 1st pre-dump and
+			# .stop_migration
 
-	def stop_migration(self):
-		logging.info("Doing final FS sync")
-		self.__run_rsync()
-		return None
+            ret = sp.call(
+                ["rsync", "-a", dir_name, dst],
+                stdout=logf, stderr=logf)
+            logging.info("rsync -a "+dir_name+" "+dst+" result ret :%d", ret)
+            if ret == 0:
+                rsync_flag = False
+            if ret != 0 and ret != 24:
+                raise Exception("Rsync failed")
+    def __run_last_rsync(self,worker):
+        logf = open(os.path.join(self.__wdir, rsync_log_file), "w+")
+        dir_name = worker._ct_config_dir
+        rsync_flag = True
+        while rsync_flag:
 
+            dst = "%s:%s" % (self.__thost, os.path.dirname(dir_name))
+
+			# First rsync might be very long. Wait for it not
+			# to produce big pause between the 1st pre-dump and
+			# .stop_migration
+
+            ret = sp.call(
+                ["rsync", "-a", dir_name, dst],
+                stdout=logf, stderr=logf)
+            logging.info("rsync -a "+dir_name+" "+dst+" result ret :%d", ret)
+            if ret == 0:
+                rsync_flag = False
+            if ret != 0 and ret != 24:
+                raise Exception("Rsync failed")
+    def start_migration(self):
+        logging.info("Starting FS migration")
+        self.__run_rsync()
+        return None
+
+    def next_iteration(self):
+        return None
+
+    def stop_migration(self,worker):
+        logging.info("Doing final container config sync")
+        self.__run_last_rsync(worker)
+        return None
+    def last_mnt_sync(self,worker):
+        logging.info("Doing final mnt sync")
+        self.__run_mnt_rsync(worker)
+        return None
 	# When rsync-ing FS inodes number will change
-	def persistent_inodes(self):
-		return False
+    def persistent_inodes(self):
+        return False

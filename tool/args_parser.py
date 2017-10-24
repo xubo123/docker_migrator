@@ -25,7 +25,7 @@ def docker_migrate_client_parse():
     parser.add_argument("--log-file", help="Write logging messages to specified file")
     parser.add_argument("--force", default=False, action='store_true', help="Don't do any sanity checks")
     parser.add_argument("--skip-cpu-check", default=False, action='store_true', help="Skip CPU compatibility check")
-
+    parser.add_argument('--pre-dump',dest='pre_dump', action='store_const', const=client.iters.PRE_DUMP_ENABLE, help='Force enable pre-dumps')
     parser.add_argument("--skip-criu-check", default=False, action='store_true', help="Skip criu compatibility check")
     parser.add_argument("--keep-images", default=False, action='store_true', help="Keep images after migration")
     parser.add_argument("--img-path", default=client.img_migrator.def_path, help="Directory where to put images")

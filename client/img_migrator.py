@@ -64,6 +64,7 @@ class lm_docker_img(object):
     def __init__(self, typ):
         self.current_iter = 0
         self.sync_time = 0.0
+        self.sync_time_list = []
         self._keep_on_close = False
         self._work_dir = None
         self._current_dir = None
@@ -80,7 +81,7 @@ class lm_docker_img(object):
         self._img_path = os.path.join(self._work_dir.name(), "img")
         os.mkdir(self._img_path)
 
-    def sync_imgs_to_target(self, dest_rpc_caller, migrate_worker, sk, thost):
+    def sync_imgs_to_target(self, dest_rpc_caller, migrate_worker, sk, thost,pre_dump):
 		# Pre-dump doesn't generate any images (yet?)
 		# so copy only those from the top dir
         logging.info("Sending images to target")
@@ -96,16 +97,29 @@ class lm_docker_img(object):
             tf.add(img)
         logging.info("\tAdd migrate_worker images")
         self._criu_work_dir = ck_dir+"/criu.work"
-        for himg in migrate_worker.get_meta_images(ck_dir):
-            tf.add(himg[1], himg[0])
-            target_imagepath = dest_rpc_caller.get_image_dir()
-            dst = "%s:%s" % (thost, os.path.join(target_imagepath, migrate_worker.get_ck_dir()))
-            sp.call(["rsync", "-a", self._criu_work_dir, dst])
-            logging.info("Command: rsync -a %s %s", self._criu_work_dir, dst)
+        if self.current_iter <= 1:
+            if pre_dump:
+                himg = migrate_worker.get_meta_images(ck_dir, pre_dump, self.current_iter)
+                logging.info("meta images:%s,%s", himg[1], himg[0])
+                tf.add(himg[1], himg[0])
+            else:
+                for himg in migrate_worker.get_meta_images(ck_dir, pre_dump, self.current_iter):
+                    logging.info("meta images:%s,%s", himg[1], himg[0])
+                    tf.add(himg[1], himg[0])
+        else:
+            for himg in migrate_worker.get_meta_images(ck_dir, pre_dump, self.current_iter):
+                logging.info("meta images:%s,%s", himg[1], himg[0])
+                tf.add(himg[1], himg[0])
         tf.close()
+
+        target_imagepath = dest_rpc_caller.get_image_dir()
+        dst = "%s:%s" % (thost, os.path.join(target_imagepath, migrate_worker.get_ck_dir()))
+        sp.call(["rsync", "-a", self._criu_work_dir, dst])
+        logging.info("Command: rsync -a %s %s", self._criu_work_dir, dst)
         dest_rpc_caller.stop_accept_images()
 
         self.sync_time = time.time() - start
+        self.sync_time_list.append(self.sync_time)
 
     def save_images(self):
         logging.info("Keeping images")
@@ -179,3 +193,6 @@ class lm_docker_img(object):
 
     def img_sync_time(self):
         return self.sync_time
+
+    def img_sync_time_list(self):
+        return self.sync_time_list
