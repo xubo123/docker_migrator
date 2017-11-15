@@ -115,7 +115,7 @@ class docker_lm_worker(object):
         lm_fs_dir.extend(self._ct_volumes_dirs)
         lm_fs_dir.extend(self._mnt_diff_dirs)
         if os.path.exists(self._ct_imagemeta_dir):
-           lm_fs_dir.extend(self._ct_imagemeta_dir)
+           lm_fs_dir.append(self._ct_imagemeta_dir)
         return client.fs_migrator.lm_docker_fs(lm_fs_dir)
 
     def get_mount_id(self):
