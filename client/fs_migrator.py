@@ -40,20 +40,26 @@ class lm_docker_fs(object):
                 raise Exception("Rsync failed")
     def __run_mnt_rsync(self,worker):
         logf = open(os.path.join(self.__wdir, rsync_log_file), "w+")
-        dir_name = worker._ct_rootfs
+        mnt_dir = worker._ct_rootfs
+        top_diff_dir = worker._topdiff_dir
         rsync_flag = True
         while rsync_flag:
 
-            dst = "%s:%s" % (self.__thost, os.path.dirname(dir_name))
+            mnt_dst = "%s:%s" % (self.__thost, os.path.dirname(mnt_dir))
+            topdiff_dst = "%s:%s" % (self.__thost, os.path.dirname(top_diff_dir))
 
 			# First rsync might be very long. Wait for it not
 			# to produce big pause between the 1st pre-dump and
 			# .stop_migration
-
             ret = sp.call(
-                ["rsync", "-a", dir_name, dst],
+                ["rsync", "-a", mnt_dir, mnt_dst],
                 stdout=logf, stderr=logf)
-            logging.info("rsync -a "+dir_name+" "+dst+" result ret :%d", ret)
+            logging.info("rsync -a "+mnt_dir+" "+mnt_dst+" result ret :%d", ret)
+            ret = sp.call(
+                ["rsync", "-a", top_diff_dir, topdiff_dst],
+                stdout=logf, stderr=logf)
+            logging.info("rsync -a "+top_diff_dir+" "+topdiff_dst+" result ret :%d", ret)
+            
             if ret == 0:
                 rsync_flag = False
             if ret != 0 and ret != 24:

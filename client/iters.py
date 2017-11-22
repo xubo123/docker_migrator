@@ -80,7 +80,6 @@ class migration_iter_controller(object):
         logging.info("Final dump! ")
         self.dest_rpc_caller.start_iter(False)
         self.img.new_image_dir()
-        self.fs.last_mnt_sync(self._migrate_worker)
         self._migrate_worker.final_dump(root_pid, self.img, self.fs)
         self.dest_rpc_caller.end_iter()
         #Step4 :Restore and CLean!
@@ -90,6 +89,8 @@ class migration_iter_controller(object):
             fsstats = self.fs.stop_migration(self._migrate_worker)
             self.img.sync_imgs_to_target(self.dest_rpc_caller,
             		                           self._migrate_worker, self.connection.fdmem, self._thost, False)
+            
+            self.fs.last_mnt_sync(self._migrate_worker)
 			# Restore htype on target
             logging.info("Asking target host to restore")
             self.dest_rpc_caller.restore_from_images(self._migrate_worker._ct_id,

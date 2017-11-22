@@ -56,6 +56,7 @@ class docker_lm_worker(object):
         #/var/lib/docker/aufs/mnt/mnt_id
         self._ct_rootfs = os.path.join(
                         docker_dir, "aufs/mnt", self._mnt_id)
+        self._topdiff_dir = os .path.join(docker_dir,"aufs/diff",self._mnt_id)
         self._ct_init_rootfs = os.path.join(
                         docker_dir, "aufs/mnt", self._mnt_id+"-init")
         #layers relationship /var/lib/docker/image/aufs/layerdb/mounts

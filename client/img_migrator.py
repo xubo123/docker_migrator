@@ -94,6 +94,7 @@ class lm_docker_img(object):
         logging.info("\tPack")
         logging.info("ck_dir:===== %s", ck_dir)
         for img in filter(lambda x: x.endswith(".img"), os.listdir(ck_dir)):
+            logging.info("the image to be transffered :%s",img)
             tf.add(img)
         logging.info("\tAdd migrate_worker images")
         self._criu_work_dir = ck_dir+"/criu.work"
