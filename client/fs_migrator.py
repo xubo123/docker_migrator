@@ -105,8 +105,8 @@ class lm_docker_fs(object):
         logging.info("Doing final container config sync")
         self.__run_last_rsync(worker)
         return None
-    def last_mnt_sync(self,worker):
-        logging.info("Doing final mnt sync")
+    def mnt_diff_sync(self,worker):
+        logging.info("Doing mnt and top diff sync")
         self.__run_mnt_rsync(worker)
         return None
 	# When rsync-ing FS inodes number will change

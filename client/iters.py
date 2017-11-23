@@ -72,6 +72,7 @@ class migration_iter_controller(object):
             self.img.sync_imgs_to_target(self.dest_rpc_caller,
 			                                      self._migrate_worker, self.connection.fdmem, self._thost,True)
             logging.info("checkpoint image migration time:%s",self.img.sync_time)
+            self.fs.mnt_diff_sync(self._migrate_worker)
             iter_count += 1
             if iter_count >5:
                 break
@@ -90,7 +91,7 @@ class migration_iter_controller(object):
             self.img.sync_imgs_to_target(self.dest_rpc_caller,
             		                           self._migrate_worker, self.connection.fdmem, self._thost, False)
             
-            self.fs.last_mnt_sync(self._migrate_worker)
+            self.fs.mnt_diff_sync(self._migrate_worker)
 			# Restore htype on target
             logging.info("Asking target host to restore")
             self.dest_rpc_caller.restore_from_images(self._migrate_worker._ct_id,
