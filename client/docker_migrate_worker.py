@@ -1,6 +1,6 @@
 import json
 import logging
-import os 
+import os
 import signal
 import subprocess as sp
 from subprocess import PIPE
@@ -11,6 +11,8 @@ docker_bin = "/usr/bin/docker"
 docker_dir = "/var/lib/docker/"
 docker_run_state_dir = "/var/run/runc/"
 docker_run_meta_dir = "/run/runc/"
+AUFS = "aufs"
+OVERLAY = "overlay"
 
 class docker_lm_worker(object):
     def __init__(self,ct_id):
@@ -22,18 +24,23 @@ class docker_lm_worker(object):
     def set_options(self,opts):
         pass
 
-    def init_src(self):
+    def init_src(self,fs_driver):
+
         self.full_ctid = self.get_full_ctid()
-        self._mnt_id = self.get_mount_id()
-        self.diff_ids = self.get_diff_id()
-        self._mnt_diff_ids = self.get_mnt_diff_ids()
+        self._mnt_id = self.get_mount_id(fs_driver)
+        self.diff_ids = self.get_diff_id(fs_driver)
+        if fs_driver == AUFS:
+            self._mnt_diff_ids = self.get_mnt_diff_ids()
+        elif fs_driver == OVERLAY :
+            self._lower_dir_id = self.get_lower_dir_id()
         self._volumes_names = self.get_volumes_name()
         self.image_id = self.get_image_id()
-        self.load_fs_dir()
+        self.load_fs_dir(fs_driver)
 
         self.load_ct_config(docker_dir)
     def init_dst(self):
         pass     
+
     def get_full_ctid(self):
         container_dirlist = os.listdir(os.path.join(docker_dir,"containers"))
         full_id = ""
@@ -52,23 +59,21 @@ class docker_lm_worker(object):
     
     def root_task_pid(self):
 		return self.full_ctid
-    def load_fs_dir(self):
+    def load_fs_dir(self,fs_driver):
+        if(fs_driver == AUFS):
+            self.load_aufs_dir()
+        elif fs_driver == OVERLAY:
+            self.load_overlay_dir()
+
+    def load_aufs_dir(self):
         #/var/lib/docker/aufs/mnt/mnt_id
         self._ct_rootfs = os.path.join(
                         docker_dir, "aufs/mnt", self._mnt_id)
         self._topdiff_dir = os .path.join(docker_dir,"aufs/diff",self._mnt_id)
         self._ct_init_rootfs = os.path.join(
                         docker_dir, "aufs/mnt", self._mnt_id+"-init")
-        #layers relationship /var/lib/docker/image/aufs/layerdb/mounts
-        self._ct_layerdb_dir = os.path.join(docker_dir,"image/aufs/layerdb/mounts",self.full_ctid)
-        #layers relationship /var/lib/docker/image/aufs/layerdb/sha256
-        self._ct_diff_dirs = []
-        for diff_id in self.diff_ids :
-             _ct_diff_dir = os.path.join(docker_dir,"image/aufs/layerdb/sha256",diff_id)
-             self._ct_diff_dirs.append(_ct_diff_dir)
-        #/var/lib/docker/image/aufs/imagedb/content/sha256(/metadata/sha256)
-        self._ct_image_dir = os.path.join(docker_dir,"image/aufs/imagedb/content/sha256",self.image_id)
-        self._ct_imagemeta_dir = os.path.join(docker_dir,"image/aufs/imagedb/metadata/sha256",self.image_id)
+        #/var/lib/docker/image/aufs
+        self.load_image_dir(AUFS)
         #/var/lib/docker/aufs/diff
         self._mnt_diff_dirs = []
         for mnt_diff_id in self._mnt_diff_ids:
@@ -80,6 +85,46 @@ class docker_lm_worker(object):
               mnt_layers_dir = os.path.join(docker_dir,"aufs/layers",mnt_layers_id)
               self._ct_layers_dirs.append(mnt_layers_dir)
         #/var/lib/docker/volumes
+        self.load_volume_dir()
+        logging.info("Container rootfs: %s", self._ct_rootfs)
+        logging.info("Container mounts_dir: %s", self._ct_layerdb_dir)
+        logging.info("Container layers : %s",self._ct_layers_dirs)
+        logging.info("Container diff : %s",self._ct_diff_dirs)
+        logging.info("Container volumes : %s",self._ct_volumes_dirs)
+
+    def load_overlay_dir(self):
+        #/var/lib/docker/overlay/mnt_id
+        self._ct_rootfs = os.path.join(
+                        docker_dir, "overlay", self._mnt_id)
+        self._ct_init_rootfs = os.path.join(
+                        docker_dir, "overlay", self._mnt_id+"-init")  
+        #/var/lib/docker/image/overlay
+        self.load_image_dir(OVERLAY)
+        #/var/lib/docker/overlay/lower_id
+        self._ct_lower_dir = os.path.join(
+                        docker_dir, "overlay", self._lower_dir_id)
+        #/var/lib/docker/volumes
+        self.load_volume_dir()                
+        logging.info("Container rootfs: %s", self._ct_rootfs)
+        logging.info("Container lower_dir : %s",self._ct_lower_dir)
+        logging.info("Container mounts_dir: %s", self._ct_layerdb_dir)
+        logging.info("Container diff : %s",self._ct_diff_dirs)
+        logging.info("Container volumes : %s",self._ct_volumes_dirs)
+        
+    def load_image_dir(self,fs_driver):
+        #layers relationship /var/lib/docker/image/fsdriver/layerdb/mounts  
+        self._ct_layerdb_dir = os.path.join(docker_dir,"image/"+fs_driver+"/layerdb/mounts/"+self.full_ctid)
+        #layers relationship /var/lib/docker/image/fsdriver/layerdb/sha256 
+        self._ct_diff_dirs = []
+        for diff_id in self.diff_ids :
+             _ct_diff_dir = os.path.join(docker_dir,"image/"+fs_driver+"/layerdb/sha256/"+diff_id)
+             self._ct_diff_dirs.append(_ct_diff_dir)
+        #/var/lib/docker/image/fsdriver/imagedb/content/sha256(/metadata/sha256)
+        self._ct_image_dir = os.path.join(docker_dir,"image/"+fs_driver+"/imagedb/content/sha256/"+self.image_id)
+        self._ct_imagemeta_dir = os.path.join(docker_dir,"image/"+fs_driver+"/imagedb/metadata/sha256/"+self.image_id)
+        
+    def load_volume_dir(self):
+        #/var/lib/docker/volumes
         self._ct_volumes_dirs = []
         if self._volumes_names!=None : 
             if  self._volumes_names[0] == 1:
@@ -89,12 +134,6 @@ class docker_lm_worker(object):
             elif self._volumes_names[0] == 2 :
                for volumes_name in self._volumes_names[1:] :
                     self._ct_volumes_dirs.append(volumes_name)
-        logging.info("Container rootfs: %s", self._ct_rootfs)
-        logging.info("Container mounts_dir: %s", self._ct_layerdb_dir)
-        logging.info("Container layers : %s",self._ct_layers_dirs)
-        logging.info("Container diff : %s",self._ct_diff_dirs)
-        logging.info("Container volumes : %s",self._ct_volumes_dirs)
-
     def load_ct_config(self,path):
         #config.v2.json
         self._ct_config_dir = os.path.join(
@@ -108,36 +147,41 @@ class docker_lm_worker(object):
         logging.info("Container meta: %s", self._ct_run_meta_dir)
         logging.info("Container state: %s", self._ct_run_state_dir)
 
-    def get_fs(self, fdfs=None):
+    def get_fs(self,fs_driver,fdfs=None):
         # use rsync for rootfs and configuration directories
         lm_fs_dir = [self._ct_rootfs,self._ct_init_rootfs,self._ct_config_dir,self._ct_layerdb_dir,self._ct_image_dir]
-        lm_fs_dir.extend(self._ct_layers_dirs)
+        if fs_driver == AUFS:
+            lm_fs_dir.extend(self._ct_layers_dirs)
+            lm_fs_dir.extend(self._mnt_diff_dirs)
+        elif fs_driver == OVERLAY:
+            lm_fs_dir.append(self._ct_lower_dir)
         lm_fs_dir.extend(self._ct_diff_dirs)
         lm_fs_dir.extend(self._ct_volumes_dirs)
-        lm_fs_dir.extend(self._mnt_diff_dirs)
         if os.path.exists(self._ct_imagemeta_dir):
            lm_fs_dir.append(self._ct_imagemeta_dir)
         return client.fs_migrator.lm_docker_fs(lm_fs_dir)
 
-    def get_mount_id(self):
+    def get_mount_id(self,fs_driver):
         container_id = self.full_ctid
-        mount_path = "/var/lib/docker/image/aufs/layerdb/mounts/"+container_id+"/mount-id"
+        mount_path = os.path.join("/var/lib/docker/image/",fs_driver+"/layerdb/mounts/"+container_id+"/mount-id")
+        logging.info("mount_path:%s",mount_path)
         try:
-            f = open(mount_path)
-            mnt_id = f.read()
+            fd = open(mount_path)
+            mnt_id = fd.read()
         finally:
-            f.close()
+            fd.close()
 
         logging.info("mnt_id:%s",mnt_id)
         return mnt_id
 
     
 
-    def get_diff_id(self):
+    def get_diff_id(self,fs_driver):
         parent_diff_id = self.full_ctid
-        mounts_root =  os.path.join(docker_dir,"image/aufs/layerdb/mounts")
-        diff_id_root =  os.path.join(docker_dir,"image/aufs/layerdb/sha256")
-        parent_path = os.path.join(mounts_root,parent_diff_id,"parent")
+        mounts_root =  os.path.join(docker_dir,"image/"+fs_driver+"/layerdb/mounts")
+        diff_id_root =  os.path.join(docker_dir,"image/"+fs_driver+"/layerdb/sha256")
+        parent_path = os.path.join(mounts_root,parent_diff_id+"/parent")
+        logging.info("parent_path:%s",parent_path)
         diff_ids = []
         while os.path.exists(parent_path) :
             logging.info("parent_path:%s",parent_path)
@@ -148,7 +192,7 @@ class docker_lm_worker(object):
                 diff_ids.append(diff_id)
             finally:
                 parent_file.close()
-            parent_path = os.path.join(diff_id_root,diff_id,"parent")
+            parent_path = os.path.join(diff_id_root,diff_id+"/parent")
             logging.info("end_parent_path:%s",parent_path)
         return diff_ids
 
@@ -211,6 +255,19 @@ class docker_lm_worker(object):
         finally:
             parent_ids_file.close()
         return parent_ids
+
+    def get_lower_dir_id(self):
+        lower_id_path = docker_dir+"overlay/"+self._mnt_id+"/lower-id"
+        logging.info("overlay lower_id_path:%s",lower_id_path)
+        lower_id = ""
+        try :
+            lower_id_file = open(lower_id_path)
+            lower_id = lower_id_file.readline()
+            lower_id = lower_id.strip()
+            logging.info("overlay lower_id:%s",lower_id)
+        finally :
+            lower_id_file.close()
+        return lower_id
 
     def get_meta_images(self, path,pre_dump_flag,iterCount):
 	# Send the meta state file with criu images

@@ -52,6 +52,7 @@ def run_migrator_client(args, unknown_args):
     target_args.extend(["--to", args.to,
                         "--fdrpc", str(connection_sks[0].fileno()),
                         "--fdmem", str(connection_sks[1].fileno()),
+                        "--fs-driver",args.fs_driver,
                         "--pre-dump"])
 
     # Call docker-migrator
@@ -73,6 +74,8 @@ client_parser.set_defaults(func=run_migrator_client)
 client_parser.add_argument("to", help="IP where to migrate")
 client_parser.add_argument("--port", help="Port where to migrate", type=int,
                            default=default_service_bind_port)
+client_parser.add_argument("--fs-driver", help=" fs_driver to migrate", type=str,
+                           default="aufs")
 client_parser.add_argument("--path", help="Path to docker-migrator script",
                            default=os.path.join(os.path.dirname(__file__), "docker-migrator"))
 

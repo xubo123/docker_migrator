@@ -64,6 +64,28 @@ class lm_docker_fs(object):
                 rsync_flag = False
             if ret != 0 and ret != 24:
                 raise Exception("Rsync failed")
+
+    def __run_upper_dir_sync(self,worker):
+        logf = open(os.path.join(self.__wdir, rsync_log_file), "w+")
+        upper_dir = worker._ct_rootfs
+        rsync_flag = True
+        while rsync_flag:
+
+            upper_dst = "%s:%s" % (self.__thost, os.path.dirname(upper_dir))
+
+			# First rsync might be very long. Wait for it not
+			# to produce big pause between the 1st pre-dump and
+			# .stop_migration
+            ret = sp.call(
+                ["rsync", "-a", upper_dir, upper_dst],
+                stdout=logf, stderr=logf)
+            logging.info("rsync -a "+upper_dir+" "+upper_dst+" result ret :%d", ret)
+            
+            if ret == 0:
+                rsync_flag = False
+            if ret != 0 and ret != 24:
+                raise Exception("Rsync failed")
+
     def __run_last_rsync(self,worker):
         logf = open(os.path.join(self.__wdir, rsync_log_file), "w+")
         dir_name = worker._ct_config_dir
@@ -109,6 +131,15 @@ class lm_docker_fs(object):
         logging.info("Doing mnt and top diff sync")
         self.__run_mnt_rsync(worker)
         return None
+    def upper_dir_sync(self,worker):
+        logging.info("Doing upper_dir sync")
+        self.__run_upper_dir_sync(worker)
+        return None
+    def rwlayer_sync(self,worker,fs_driver):
+        if fs_driver == "aufs":
+            self.mnt_diff_sync(worker)
+        elif fs_driver == "overlay":
+            self.upper_dir_sync(worker)
 	# When rsync-ing FS inodes number will change
     def persistent_inodes(self):
         return False

@@ -18,6 +18,7 @@ def docker_migrate_client_parse():
     parser = argparse.ArgumentParser("Client to implement docker live migration")
     parser.add_argument("ct_id", help = "ID of which container to migrate!")
     parser.add_argument("--to", help = "IP of where to migrate!")
+    parser.add_argument("--fs-driver", type=str, default="aufs", help="fs_driver to migrate")
     parser.add_argument("--fdmem", type=int, required=True, help="socket fd to transmit memory data!")
     parser.add_argument("--fdrpc", type=int, required=True, help="socket fd to send rpc require data!")
     parser.add_argument("--fdfs", help="socket fd to send fs data!")

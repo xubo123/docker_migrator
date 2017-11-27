@@ -18,7 +18,6 @@ logging.basicConfig(filename=args.log_file, filemode="a", level=logging.INFO,
 
 # Setup hook to log uncaught exceptions
 sys.excepthook = tool.util.log_uncaught_exception
-
 tool.util.log_header()
 logging.info("Starting migrate!")
 
@@ -26,7 +25,7 @@ logging.info("Starting migrate!")
 connection = connect.connection.establish(args.fdmem,args.fdrpc,args.fdfs)
 
 #Start migration
-controller = client.iters.migration_iter_controller(args.ct_id,args.to,connection,args.mode)
+controller = client.iters.migration_iter_controller(args.ct_id,args.to,connection,args.mode,args.fs_driver)
 controller.set_options(vars(args))
 controller.start_live_migration()
 

@@ -18,15 +18,16 @@ def is_live_mode(mode):
     return mode == MIGRATION_MODE_LIVE
 
 class migration_iter_controller(object):
-    def __init__(self, ct_id, dst_id, connection, mode):
+    def __init__(self, ct_id, dst_id, connection, mode,fs_driver):
         self._mode = mode
         self.connection = connection
         self.dest_rpc_caller = client.rpc_client._rpc_client(self.connection.fdrpc)
-
+        self.fs_driver = fs_driver
         logging.info("Locally setting up!")
         self._migrate_worker = client.docker_migrate_worker.docker_lm_worker(ct_id)
-        self._migrate_worker.init_src()
-        self.fs = self._migrate_worker.get_fs(self.connection.fdfs)
+        logging.info("fs_driver:%s",fs_driver)
+        self._migrate_worker.init_src(fs_driver)
+        self.fs = self._migrate_worker.get_fs(fs_driver,self.connection.fdfs)
         if not self.fs:
             raise Exception("No fs driver found!")
         self.img = client.img_migrator.lm_docker_img("dump")
@@ -72,7 +73,7 @@ class migration_iter_controller(object):
             self.img.sync_imgs_to_target(self.dest_rpc_caller,
 			                                      self._migrate_worker, self.connection.fdmem, self._thost,True)
             logging.info("checkpoint image migration time:%s",self.img.sync_time)
-            self.fs.mnt_diff_sync(self._migrate_worker)
+            self.fs.rwlayer_sync(self._migrate_worker,self.fs_driver)
             iter_count += 1
             if iter_count >5:
                 break
@@ -90,8 +91,7 @@ class migration_iter_controller(object):
             fsstats = self.fs.stop_migration(self._migrate_worker)
             self.img.sync_imgs_to_target(self.dest_rpc_caller,
             		                           self._migrate_worker, self.connection.fdmem, self._thost, False)
-            
-            self.fs.mnt_diff_sync(self._migrate_worker)
+            self.fs.rwlayer_sync(self._migrate_worker,self.fs_driver)
 			# Restore htype on target
             logging.info("Asking target host to restore")
             self.dest_rpc_caller.restore_from_images(self._migrate_worker._ct_id,
