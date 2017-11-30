@@ -93,3 +93,8 @@ class rpc_migrate_service(object):
         self.restored = True
     def rpc_get_image_dir(self):
         return self.img.image_dir()
+
+    def rpc_mk_merged_dir(self):
+        merged_parent_dir = self._migrate_worker._ct_rootfs
+        os.chdir(merged_parent_dir)
+        os.mkdir("merged")

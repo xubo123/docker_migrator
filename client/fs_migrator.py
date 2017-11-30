@@ -40,21 +40,21 @@ class lm_docker_fs(object):
                 raise Exception("Rsync failed")
     def __run_mnt_rsync(self,worker):
         logf = open(os.path.join(self.__wdir, rsync_log_file), "w+")
-        mnt_dir = worker._ct_rootfs
+        #mnt_dir = worker._ct_rootfs
         top_diff_dir = worker._topdiff_dir
         rsync_flag = True
         while rsync_flag:
 
-            mnt_dst = "%s:%s" % (self.__thost, os.path.dirname(mnt_dir))
+            #mnt_dst = "%s:%s" % (self.__thost, os.path.dirname(mnt_dir))
             topdiff_dst = "%s:%s" % (self.__thost, os.path.dirname(top_diff_dir))
 
 			# First rsync might be very long. Wait for it not
 			# to produce big pause between the 1st pre-dump and
 			# .stop_migration
-            ret = sp.call(
-                ["rsync", "-a", mnt_dir, mnt_dst],
-                stdout=logf, stderr=logf)
-            logging.info("rsync -a "+mnt_dir+" "+mnt_dst+" result ret :%d", ret)
+            #ret = sp.call(
+            #    ["rsync", "-a", mnt_dir, mnt_dst],
+            #    stdout=logf, stderr=logf)
+            #logging.info("rsync -a "+mnt_dir+" "+mnt_dst+" result ret :%d", ret)
             ret = sp.call(
                 ["rsync", "-a", top_diff_dir, topdiff_dst],
                 stdout=logf, stderr=logf)
@@ -67,7 +67,7 @@ class lm_docker_fs(object):
 
     def __run_upper_dir_sync(self,worker):
         logf = open(os.path.join(self.__wdir, rsync_log_file), "w+")
-        upper_dir = worker._ct_rootfs
+        upper_dir = worker._upper_dir
         rsync_flag = True
         while rsync_flag:
 
@@ -115,9 +115,11 @@ class lm_docker_fs(object):
                 rsync_flag = False
             if ret != 0 and ret != 24:
                 raise Exception("Rsync failed")
-    def start_migration(self):
+    def start_migration(self,fs_driver,caller,worker):
         logging.info("Starting FS migration")
         self.__run_rsync()
+        if fs_driver == "overlay":
+            caller.mk_merged_dir()
         return None
 
     def next_iteration(self):

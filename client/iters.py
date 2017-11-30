@@ -6,6 +6,7 @@ import client.docker_migrate_worker
 import tool.criu_api
 import tool.criu_req
 import client.mstats
+import time
 
 MIGRATION_MODE_LIVE = "live"
 MIGRATION_MODE_RESTART = "restart"
@@ -16,6 +17,11 @@ PRE_DUMP_AUTO_DETECT = None
 def is_live_mode(mode):
     """Check is migration running in live mode"""
     return mode == MIGRATION_MODE_LIVE
+
+class iter_const(object):
+    MAX_ITER_COUNT = 7
+    MIN_PAGES_WRITTEN = 500
+    MAX_GROW_RATE = 10
 
 class migration_iter_controller(object):
     def __init__(self, ct_id, dst_id, connection, mode,fs_driver):
@@ -58,13 +64,14 @@ class migration_iter_controller(object):
         use_pre_dumps = self.__check_use_pre_dumps()
         migration_stats.handle_start()
 
-        iter_count = 0
         # Step1 : FS migration
         logging.info("FS migration start!")
-        fsstats = self.fs.start_migration()
+        fsstats = self.fs.start_migration(self.fs_driver,self.dest_rpc_caller,self._migrate_worker)
         migration_stats.handle_preliminary(fsstats)
-
-        #Step2 : pre-dump TODO
+        
+        #Step2 : pre-dump
+        iter_count = 0
+        pre_dump_stat = None
         while use_pre_dumps:
             logging.info("Pre-Dump Docker Container!itersCount:%d",iter_count)
             self.dest_rpc_caller.start_iter(False)
@@ -72,11 +79,15 @@ class migration_iter_controller(object):
             self._migrate_worker.pre_dump(root_pid, self.img, self.fs)
             self.img.sync_imgs_to_target(self.dest_rpc_caller,
 			                                      self._migrate_worker, self.connection.fdmem, self._thost,True)
+            dump_stat = tool.criu_api.criu_get_dstats(self.img)
             logging.info("checkpoint image migration time:%s",self.img.sync_time)
             self.fs.rwlayer_sync(self._migrate_worker,self.fs_driver)
             iter_count += 1
-            if iter_count >5:
+
+            #Decide whether we continue iteration or stop and copy final dump_image
+            if not self._check_pre_copy(iter_count,dump_stat,pre_dump_stat):
                 break
+            pre_dump_stat = dump_stat
             self.dest_rpc_caller.end_iter()
         #Step3 : Stop and Copy ,Final dump and restore!
         logging.info("Final dump! ")
@@ -178,3 +189,34 @@ class migration_iter_controller(object):
             raise Exception("Can't get criu version")
         if not self.dest_rpc_caller.check_criu_version(version):
             raise Exception("Incompatible criu versions")
+    def _check_pre_copy(self,iter_count,dump_stat,pre_dump_stat):
+        logging.info("Check whether the %d iteration meet the condition of stop-and-copy...",iter_count)
+        logging.info("dump_stat.pages_written:%d",dump_stat.pages_written)
+        if dump_stat.pages_written <= iter_const.MIN_PAGES_WRITTEN:
+            logging.info("The dump pages is small enough to do final dump!")
+            return False
+        if pre_dump_stat:
+            logging.info("pre_dump_stat.pages_written:%d",pre_dump_stat.pages_written)
+            grow_rate = self._cal_grow_rate(dump_stat.pages_written,pre_dump_stat.pages_written)
+            if grow_rate >= iter_const.MAX_GROW_RATE:
+                logging.info("Written pages grows too fast with iteration!")
+                return False
+            #decrease_rate = self._cal_decrease_rate(dump_stat.pages_written,pre_dump_stat.pages_written)
+            #if decrease_rate <= iter_const.MIN_DECREASE_RATE:
+            #    logging.info("Written pages decrease too slow with iteration!")
+            #    return False
+        if iter_count >=iter_const.MAX_ITER_COUNT:
+            logging.info("Reach the max iter count!")
+            return False
+        logging.info("continue next iteration!")
+        return True
+
+    def _cal_grow_rate(self,pages_written,pre_pages_written):
+        diff = pages_written-pre_pages_written
+        grow_rate = diff*100/pre_pages_written
+        return grow_rate
+
+    def _cal_decrease_rate(self,pages_written,pre_pages_written):
+        diff = pre_pages_written - pages_written
+        decrease_rate = diff*100/pre_pages_written
+        return decrease_rate

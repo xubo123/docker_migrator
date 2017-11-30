@@ -155,8 +155,8 @@ class lm_docker_img(object):
     def image_dir_fd(self):
         return self._current_dir.fileno()
 
-    def parent_image_dir(self):
-        img_dir = "%s/%d" % (self._img_path, self.current_iter-1)
+    def parent_image_dir(self,ck_name):
+        img_dir = os.path.join("%s/%d" % (self._img_path, self.current_iter-1),ck_name)
         logging.info("\tParent directory %s", img_dir)
         parent_dir = opendir(img_dir)
         return parent_dir.name()

@@ -96,6 +96,9 @@ class docker_lm_worker(object):
         #/var/lib/docker/overlay/mnt_id
         self._ct_rootfs = os.path.join(
                         docker_dir, "overlay", self._mnt_id)
+        self._upper_dir = os.path.join(self._ct_rootfs,"upper")
+        self._work_dir = os.path.join(self._ct_rootfs,"work")
+        self._lower_id = os.path.join(self._ct_rootfs,"lower-id")
         self._ct_init_rootfs = os.path.join(
                         docker_dir, "overlay", self._mnt_id+"-init")  
         #/var/lib/docker/image/overlay
@@ -149,12 +152,16 @@ class docker_lm_worker(object):
 
     def get_fs(self,fs_driver,fdfs=None):
         # use rsync for rootfs and configuration directories
-        lm_fs_dir = [self._ct_rootfs,self._ct_init_rootfs,self._ct_config_dir,self._ct_layerdb_dir,self._ct_image_dir]
+        lm_fs_dir = [self._ct_config_dir,self._ct_layerdb_dir,self._ct_image_dir]
         if fs_driver == AUFS:
             lm_fs_dir.extend(self._ct_layers_dirs)
             lm_fs_dir.extend(self._mnt_diff_dirs)
         elif fs_driver == OVERLAY:
             lm_fs_dir.append(self._ct_lower_dir)
+            lm_fs_dir.append(self._upper_dir)
+            lm_fs_dir.append(self._work_dir)
+            lm_fs_dir.append(self._lower_id)
+            lm_fs_dir.append(self._ct_init_rootfs)
         lm_fs_dir.extend(self._ct_diff_dirs)
         lm_fs_dir.extend(self._ct_volumes_dirs)
         if os.path.exists(self._ct_imagemeta_dir):
@@ -307,7 +314,7 @@ class docker_lm_worker(object):
                                         stdout=log_fd, stderr=log_fd)
         else:
             logging.info("Pre-Dump with Parentpath")
-            parent_path = "--parent-path="+img.parent_image_dir()
+            parent_path = "--parent-path=../../%d/%s" % (img.current_iter-1,self.get_ck_dir())
             ret = sp.call([docker_bin, "checkpoint","create","--pre-dump", image_path_opt, parent_path, self._ct_id,self.get_ck_dir()],
                                         stdout=log_fd, stderr=log_fd)
         if ret != 0:
@@ -325,7 +332,8 @@ class docker_lm_worker(object):
                                         stdout=log_fd, stderr=log_fd)
         else :
            logging.info("Dump with Parentpath")
-           parent_path = "--parent-path="+img.parent_image_dir() 
+           #parent_path = "--parent-path="+img.parent_image_dir(self.get_ck_dir()) 
+           parent_path = "--parent-path=../../%d/%s" % (img.current_iter-1,self.get_ck_dir())
            ret = sp.call([docker_bin, "checkpoint","create", image_path_opt, parent_path, self._ct_id,self.get_ck_dir()],
                                         stdout=log_fd, stderr=log_fd)
         if ret != 0:
