@@ -1,6 +1,7 @@
 #
 #Help to operate on target host
 #
+import os
 import tool.criu_req
 import tool.criu_api
 import logging
