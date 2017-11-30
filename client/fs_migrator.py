@@ -119,7 +119,7 @@ class lm_docker_fs(object):
         logging.info("Starting FS migration")
         self.__run_rsync()
         if fs_driver == "overlay":
-            caller.mk_merged_dir()
+            caller.mk_merged_dir(worker._ct_rootfs)
         return None
 
     def next_iteration(self):
