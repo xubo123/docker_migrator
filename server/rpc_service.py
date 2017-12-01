@@ -89,12 +89,17 @@ class rpc_migrate_service(object):
     def rpc_restore_from_images(self, ctid, ck_dir):
         logging.info("Restoring from images")
         self._migrate_worker.put_meta_images(self.img.image_dir(), ctid, ck_dir)
-        self._migrate_worker.final_restore(self.img, self.criu_connection, ck_dir)
-        logging.info("Restore succeeded")
-        self.restored = True
+        ret = self._migrate_worker.final_restore(self.img, self.criu_connection, ck_dir)
+        if ret != 0:
+            return ret
+        else:
+            logging.info("Restore succeeded")
+            self.restored = True
+            return ret
     def rpc_get_image_dir(self):
         return self.img.image_dir()
 
     def rpc_mk_merged_dir(self,merged_parent_dir):
         os.chdir(merged_parent_dir)
-        os.mkdir("merged")
+        if not os.path.exists(merged_parent_dir+"merged"):
+            os.mkdir("merged")

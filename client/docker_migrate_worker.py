@@ -341,13 +341,14 @@ class docker_lm_worker(object):
 
     
     def final_restore(self, img, criu,ck_dir):
-		log_fd = open("/tmp/docker_restore.log", "w+")
-		image_path_opt = "--checkpoint-dir=" + img.image_dir()
-	        logging.info("restore command:%s",[docker_bin, "start", image_path_opt,"--checkpoint="+ck_dir, self._ct_id])
-         	ret = sp.call([docker_bin, "start", image_path_opt,"--checkpoint="+self.get_ck_dir(), self._ct_id],
+        log_fd = open("/tmp/docker_restore.log", "w+")
+        image_path_opt = "--checkpoint-dir=" + img.image_dir()
+        logging.info("restore command:%s",[docker_bin, "start", image_path_opt,"--checkpoint="+ck_dir, self._ct_id])
+        ret = sp.call([docker_bin, "start", image_path_opt,"--checkpoint="+self.get_ck_dir(), self._ct_id],
 					stdout=log_fd, stderr=log_fd)
-		if ret != 0:
-			raise Exception("docker restore failed")
+        if ret != 0:
+             raise Exception("docker restore failed")
+        return ret
     
 
     def get_ck_dir(self):

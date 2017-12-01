@@ -105,7 +105,7 @@ class migration_iter_controller(object):
             self.fs.rwlayer_sync(self._migrate_worker,self.fs_driver)
 			# Restore htype on target
             logging.info("Asking target host to restore")
-            self.dest_rpc_caller.restore_from_images(self._migrate_worker._ct_id,
+            ret = self.dest_rpc_caller.restore_from_images(self._migrate_worker._ct_id,
 			                                                  self._migrate_worker.get_ck_dir())
 
         except Exception:
@@ -113,18 +113,27 @@ class migration_iter_controller(object):
             raise
 
 		# Restored on target, can't fail starting from this point
-        try:
+        if ret != 0:
+                logging.info("target host fail to restore ,Start to restore on source host!")
+                ret = self._migrate_worker.final_restore(self.img, self.criu_connection, self._migrate_worker.get_ck_dir())
+                if ret != 0:
+                    logging.info("Source_container fail to restore!")
+                    
+                else:
+                    logging.info("Source_container success to restore!")
+        else :
+            try:
 
-            dstats = tool.criu_api.criu_get_dstats(self.img)
-            migration_stats.handle_iteration(dstats, fsstats)
-            logging.info("Migration succeeded")
-            self._migrate_worker.migration_complete(self.fs, self.dest_rpc_caller)
-            migration_stats.handle_stop(self)
-            self.criu_connection.close()
-            self.img.close()
+                dstats = tool.criu_api.criu_get_dstats(self.img)
+                migration_stats.handle_iteration(dstats, fsstats)
+                logging.info("Migration succeeded")
+                self._migrate_worker.migration_complete(self.fs, self.dest_rpc_caller)
+                migration_stats.handle_stop(self)
+                self.criu_connection.close()
+                self.img.close()
 
-        except Exception as e:
-            logging.warning("Exception during final cleanup: %s", e)
+            except Exception as e:
+                logging.warning("Exception during final cleanup: %s", e)
 
 
     def __check_support_mem_track(self):
