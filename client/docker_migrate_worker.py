@@ -347,7 +347,7 @@ class docker_lm_worker(object):
         ret = sp.call([docker_bin, "start", image_path_opt,"--checkpoint="+self.get_ck_dir(), self._ct_id],
 					stdout=log_fd, stderr=log_fd)
         if ret != 0:
-             raise Exception("docker restore failed")
+             logging.info("docker restore failed")
         return ret
     
 
