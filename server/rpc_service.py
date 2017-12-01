@@ -101,5 +101,5 @@ class rpc_migrate_service(object):
 
     def rpc_mk_merged_dir(self,merged_parent_dir):
         os.chdir(merged_parent_dir)
-        if not os.path.exists(merged_parent_dir+"/merged"):
+        if not os.path.exists(os.path.join(merged_parent_dir,"merged")):
             os.mkdir("merged")
