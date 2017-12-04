@@ -24,9 +24,9 @@ CRIU is a tool of process live_migration in user namespce.It can save checkpoint
 
 ## 2 How to use
 ***
-We provide a detailed description of the !(document)</doc/document> for you.The document tell you how to setup the experiment enviroment,and use docker_migrator to live_migrate docker container.
+We provide a detailed description of the [document](/doc/document) for you.The document tell you how to setup the experiment enviroment,and use docker_migrator to live_migrate docker container.
 
 ## 3 Licensing
 ***
-Docker_migrator is licensed under the Apache License, Version 2.0. See !(LICENSE)</LICENSE> for the full license text.
+Docker_migrator is licensed under the Apache License, Version 2.0. See [LICENSE](/LICENSE) for the full license text.
 
