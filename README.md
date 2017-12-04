@@ -24,7 +24,7 @@ CRIU is a tool of process live_migration in user namespce.It can save checkpoint
 
 ## 2 How to use
 ***
-We provide a detailed description of the [document](/document) for you.The document tell you how to setup the experiment enviroment,and use docker_migrator to live_migrate docker container.
+We provide a detailed description of the [document](/doc/document.md) for you.The document tell you how to setup the experiment enviroment,and use docker_migrator to live_migrate docker container.
 
 ## 3 Licensing
 ***
