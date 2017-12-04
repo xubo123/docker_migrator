@@ -10,24 +10,8 @@ information within 7 days, we cannot debug your issue and will close it. We
 will, however, reopen it if you later provide the information.
 
 For more information about reporting issues, see
-https://github.com/moby/moby/blob/master/CONTRIBUTING.md#reporting-other-issues
+https://github.com/xubo123/docker_migrator/blob/master/CONTRIBUTING.md#reporting-other-issues
 
----------------------------------------------------
-GENERAL SUPPORT INFORMATION
----------------------------------------------------
-
-The GitHub issue tracker is for bug reports and feature requests.
-General support for **docker** can be found at the following locations:
-
-- Docker Support Forums - https://forums.docker.com
-- Slack - community.docker.com #general channel
-- Post a question on StackOverflow, using the Docker tag
-
-General support for **moby** can be found at the following locations:
-
-- Moby Project Forums - https://forums.mobyproject.org
-- Slack - community.docker.com #moby-project channel
-- Post a question on StackOverflow, using the Moby tag
 
 ---------------------------------------------------
 BUG REPORT INFORMATION
@@ -61,7 +45,7 @@ Briefly describe the problem you are having in a few paragraphs.
 (paste your output here)
 ```
 
-**Output of `docker info`:**
+**Output of `criu version`:**
 
 ```
 (paste your output here)
