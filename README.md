@@ -1,39 +1,32 @@
----
-layout:     post
-title:      "Docker容器迁移项目实现总结"
-subtitle:   "Python实现docker容器C/R"
-date:       2017-09-25 13:00:00
-author:     "Xu"
-header-img: "img/post-bg-2015.jpg"
-catalog: true
-tags:
-    - docker迁移项目（Python）
----
+## 1.docker_migrator
+***
+The docker_migrator tool is uesd for docker container live_migration.Docker container can move to target host from source with the help of docker_migrator,and there is no need to shutdown the container.
 
-## Docker容器迁移流程总结
+We introduce three important concept here to help us understand docker container's live_migration.
 
-经过半年知识的积累，从了解go语言开始展开对docker源码的阅读，熟悉了docker的代码架构和命令执行流程，通过分析docker checkpoint命令执行流程的分析，进一步阅读containerd模块，containerd－shim
-模块的代码,containerd模块负责对容器生命周期进行管理，containerd－shim则是用于封装接口对接runc模块的夹层代码，runc模块则用于封装lincontainerd来实现满足OCI标准的容器。而docker容器检查点创建的实现需要runc调用criu第三方工具，所以进一步我需要深入criu对进程进行检查点创建和恢复的过程，其中涉及到了很多C语言的基础知识以及Unix编程技巧。最后在掌握所有这些技术基础后，开始以phaul项目为基础来实现对docker容器热迁移的过程，phaul是一个利用criu第三方的工具来实现对进程热迁移流程的项目。python编写，所以目前我同样采取phaul编程架构然后利用docker checkpoint／start的技术支持来实现对docker容器进行热迁移的项目。
+### 1.1 Live Migration
 
+What's live migration,it's a very common kind of technique for vitual machine.In traditional Cloud_Platform enviroment,we have to schedule some virtual machine considering on load-balance,system upgrating or single-node-failure,and so on.But some special virtual machine which is running process like online-game,hpc aplication which can't undertake long-time breakdown.As a result,we should implement the technique that can migrate virtual machine with real-time status from node to node.
 
-编程架构图：
-![LiveMigrationFramework](/img/LiveMigrationFramework.png)
+It's the same with docker container.With the development of docker container and more and more cloud_platform developer start to use docker container to deploy application,the technique of docker container's live_migration is especially important for container schedule.
 
+### 1.2 Pre-Copy
 
-### 热迁移流程描述：
-项目使用描述：
+Pre-Copy is a famous live-migration strategy ,docker_migrator adopt the pre-copy strategy to implement docker container live_migration.I'll give a brief description of live_migration(pre-copy) procedure.
 
-* 1.宿主机和目的机同时开启docker－migrator service服务：./docker-migrator-switch service
-* 2.在宿主机端启动docker容器迁移服务：./docker-migrator-switch client ip ct_id(Ex:./docker-migrator-switch client 192.168.58.130 e42eqasdaaa221)
+* 1 FileSystem Migration:docker_migrator support two main kind of fs driver migration:AUFS,OVERLAY。
+* 2 Memory iteration migration
+* 3 Stop-and-Copy: The iteration will stop when the memory image file is small enough to make the migration transparent to application,or the iteration times reach the max times that we set before.
+* 4 Restore: After the filesystem migration and memory iteration ,we will restore the docker container on the target.If we fail to restore the container,the container will restore on the source again.
 
-热迁移过程描述：
+### 1.3 CRIU
+CRIU is a tool of process live_migration in user namespce.It can save checkpoint of process real-time status,and restore the process based on the checkpoint file.Docker_migrator is implemented with the help of criu tool.Detailed imformation:  <https://criu.org/Main_Page>  
 
-* 1.验证cpu信息：通过发送criureq的cpucheck请求验证cpu信息是否满足需求
-* 2.验证criu版本是否匹配：源主机的criu版本必须低于目的机criu版本
-* 3.文件系统迁移：
-  迁移的文件目录包括：
-  ![migration_fs](/img/fs_migration.png)
-  
-* 4.内存迭代迁移，目前还没有实现，暂时的实现思路是通过调用criu pre-dump来实现
-* 5.Stop-And-Copy，达到阈值条件进行最后一轮备份及迭代传输
-* 6.传输检查点镜像文件，目的端进行恢复，恢复成功后，发送响应，源端关闭容器
+## 2 How to use
+***
+We provide a detailed description of the !(document)</doc/document> for you.The document tell you how to setup the experiment enviroment,and use docker_migrator to live_migrate docker container.
+
+## 3 Licensing
+***
+Docker_migrator is licensed under the Apache License, Version 2.0. See !(LICENSE)</LICENSE> for the full license text.
+
